@@ -1,0 +1,53 @@
+
+在 linux 文件结构中，有一个很神奇的目录 —— /usr。
+	讨论中，大部分观点认为：
+	usr 是 unix system resources 的缩写；
+	usr 是 user 的缩写；
+	usr 是 unix software resources 的缩写。
+	 
+根据常识判断，是 user 缩写的可能性不大，因为和 /home 冲突了嘛。不过是 system resources 还是 software resources 的缩写还真不好说。特此查了好多东西，却发现竟然连 wikipedia 也模棱两可。后来终于找到了 相关的文档和介绍。（via，cache）
+ 
+/usr usually contains by far the largest share of data on a system. Hence, this is one of the most important directories in the system as it contains all the user binaries, their documentation, libraries, header files, etc…. X and its supporting libraries can be found here. User programs like telnet, ftp, etc…. are also placed here. In the original Unix implementations, /usr was where the home directories of the users were placed (that is to say, /usr/someone was then the directory now known as /home/someone). In current Unices, /usr is where user-land programs and data (as opposed to ’system land’ programs and data) are. The name hasn’t changed, but it’s meaning has narrowed and lengthened from “everything user related” to “user usable programs and data”. As such, some people may now refer to this directory as meaning ‘User System Resources’ and not ‘user’ as was originally intended.（via 1,2）
+ 
+/usr 是系统核心所在，包含了所有的共享文件。它是 unix 系统中最重要的目录之一，涵盖了二进制文件，各种文档，各种头文件，x，还有各种库文件；还有诸多程序，例如 ftp，telnet 等等。
+ 
+曾经的 /usr 还是用户的家目录，存放着各种用户文件 —— 现在已经被 /home 取代了（例如 /usr/someone 已经改为 /home/someone）。现代的 /usr 只专门存放各种程序和数据，用户目录已经转移。虽然  /usr 名称未改，不过其含义已经从“用户目录”变成了“unix 系统资源”目录。值得注意的是，在一些 unix 系统上，仍然把 /usr/someone 当做用户家目录，如 Minix。
+ 
+至此，真相大白。看来就像前一阵子的 /var/run 移到 /run 一样。
+ 
+真的是不看不知道，一看吓一跳呀。原来 linux 几经进化，好多目录的诞生和用途已经产生了根本的变化。历史车轮在前进，长江后浪推前浪，正所谓：学习历史，收获真知；尽心竭力，前进不止。
+ 
+ 
+/usr 目录结构：
+/usr/bin : 所有可执行文件，如 gcc，firefox 等（指不包含在 /sbin 和 /bin 内的）；
+/usr/include : 各种头文件，编译文件等时需要使用；
+/usr/include/’package-name’ : 程序特定的头文件；
+/usr/lib : 所以可执行文件所需要的库文件；
+/usr/local : /usr 通常只包含系统发行时自带的程序，而 /usr/local 则是本地系统管理员用来自由添加程序的目录；
+/usr/X11R6 : x 系统的二进制文件，库文件，文档，字体等。它不等同于 /usr 的作用，只有 x 才能调用这些库文件等，其他程序不读取或者使用。因为 linux 没有原生图形界面，而且 linux 大部分情况下是 for server 的，所以图形界面没有意义；其中 X11R6 代表 version 11 release 6；
+/usr/X11R6/bin : x 的二进制文件，包含运行 x 的必须文件；
+/usr/X11R6/include : x 相关的头文件；
+/usr/X11R6/lib : x 库文件；
+/usr/X11R6/lib/modules : x 的模块，启动时加载。缺少 video4linux, DRI and GLX 和 输入输出设备 模块，将工作不正常；
+/usr/X11R6/lib/X11/fonts : x font server 的字体文件；
+/usr/doc : 文档。实际是 /usr/share/doc 的软链接；
+/usr/etc : 一个极少用到的配置文件存放地；
+/usr/games : 曾经包含游戏等文件，现在很少用到；
+/usr/info : 系统相关信息，是 /usr/share/info 的软链接；
+/usr/man : man 手册，已经移至 /usr/share/man；
+/usr/sbin : 类似 /sbin，root 可以执行。但此目录不包含在环境变量 $PATH 中，它包含的程序类似于 chroot, useradd, in.tftpd and pppconfig；
+/usr/share : 它包含了各种程序间的共享文件，如字体，图标，文档等。（/usr/local 对应的目录是  /usr/loca/share）;
+/usr/share/doc : 类似应用程序的 man 手册。它包含程序的说明文件，默认配置文件等；
+/usr/share/info : 不常用，已经被 man 代替；
+/usr/share/man : app 的 manual；
+/usr/share/icons : 应用程序的图标等文件，分为 png，svg 等多种格式；
+/usr/share/fonts : 字体文件，系统范围内可使用，~/.fonts 仅当前用户可用；
+/usr/src : linux 内核的源码和说明文档等；
+/usr/src/linux : linux 源代码；
+/usr/src/linux/.config : 内核编译过程产生的文件；通常由命令 ‘make config’ ， ‘make menuconfig’ 或 ‘make xconfig’ 执行后产生；
+/usr/src/linux/.depend, /usr/src/linux/.hdepend : ‘make dep’ 检测编译依赖时需要的文件，由 /usr/src/linux/.config 产生；
+/usr/src/linux/COPYING : GNU license；
+/usr/src/linux/Makefile : 编译内核所需的 Makefile；
+/usr/src/linux/Rules.make : 当有多个 Makefile 时，根据它的规则执行 make；
+/usr/tmp : 已经被众多发行版抛弃的临时文件夹。
+

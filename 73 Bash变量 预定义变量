@@ -1,0 +1,85 @@
+
+预定义变量
+	预定义变量	作用
+	   $?		最后以执行的命令的返回状态。如果值为0，表示正确执行
+	   		如果值非0，表示错误执行，具体是哪个数由命令自己决定
+	   $$		当前进行的进程号 PID
+	   $!		后台运行的最后一个进程的进程号 PID
+	   
+	
+	可以看到ls正确执行的时候，此时 $?=0 ，表明ls这条指令正确执行了。
+	lsdg这条命令不存在，此时 $?=127，表示系统找不到该命令。
+	ls jei表示查看jei这个文件或目录，此时 $?=2，表示系统找不到该文件或目录。
+	
+	我们也可以回想起之前学过的 && 和 || 用来判断上一条命令是否正确执行，
+	其实归根结底也是通过 $? 返回的值进行判断的。
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ ls
+	anaconda3  baidunetdisk          Desktop    Downloads  Music     Public  Templates
+	Android    baidunetdiskdownload  Documents  GNS3       Pictures  snap    Videos
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $?
+	0
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ lsdg
+	Command 'lsdg' not found, did you mean:
+
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $?
+	127
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ ls jei
+	ls: cannot access 'jei': No such file or directory
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $?
+	2
+	**********************************************************************************
+	parameter5.sh的内容如下：
+	#!/bin/bash
+	#输出当前进程的PID
+	#这个PID就是parameter5.sh这个脚本执行时，生成的进程PID
+	echo "The current process is $$"
+
+	#使用find命令在 /home/Desktop目录下查找hello.sh文件
+	#符号&的意思就是把Ingles放入后台执行，关于后台执行将在系统管理章节详细介绍
+	#简单理解放入后台运行，就类似于Windows中将应用最小化
+	find ./ -name hello.sh &
+	echo "The last one Daemon process is $!"
+	
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./paramater5.sh 
+	The current process is 8848
+	The last one Daemon process is 8849
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./hello.sh
+	
+	
+接收键盘输入 read命令
+	命令格式: read [选项] [变量名]
+		  -p "提示信息" : 在等待read输入时，输出提示信息
+		  -t 秒数: 	  read命令会一直等待用户输入，使用此选项可指定等待的时间
+		  -n 字符数:	  read命令只接受指定的字符数，就会执行(否则只能回车表示结束)
+		  -s :		  隐藏输入的数据，适用于机密信息的输入
+	
+	我们在前面已经说过了位置参数变量，但是这样的参数传递只有是写这个程序的人才知道。
+	所以普通用户要使用一个脚本时，使用read提示，接收键盘输入更方便使用。
+	
+	#!/bin/bash
+	#提示"请输入姓名"并等待30秒，把用户的输入保存入变量name中
+	read -t 30 -p "Please input your name:" name
+	echo "Name is $name"
+
+	#假设年龄是隐私，所以适用-s选项，隐藏输入
+	read -t 30 -s -p "Please enter your age:" age
+	echo -e "\nAge is $age"
+
+	#使用"-n 1"选项只接收一个字符输入就会执行，不需要回车(优点类似y/n)
+	read -t 30 -n 1  -p "Please select your gender[M/F]:" gender
+	echo "Gender is $gender"
+	
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./paramater6.sh 
+	Please input your name:shenc chao
+	Name is "shenc chao"
+	Please enter your age:
+	Age is 18
+	Please select your gender[M/F]:MGender is M
+
+	
+

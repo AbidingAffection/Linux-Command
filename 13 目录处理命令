@@ -1,0 +1,95 @@
+关于-r和-p：
+	-p 的这个p指的是parents，是向上递归的意思，所以mkdir -p /tmp/Japan/longze (longze是要的，但此时上级目录Japan还没有)
+	-r 的这个r指的是recursive，是向下递归的意思，所以cp -r /etc/apt tem/Japan (你要复制的是的apt目录下的所有东西)
+
+
+目录处理命令mkdir：
+	英文原意 make directories
+	所在路径 /bin/mkdir
+	
+	 mkdir /tmp/xiaodianying
+	     在tmp目录下创建了目录(文件夹)xiaodianying
+	     
+	 mkdir /tmp/Japan/boduo 
+	     1.我们想在没有Japan目录的情况下，创建Japan目录并在其下创建boduo目录，此时操作无法执行
+	     	mkdir: cannot create directory ‘/tmp/Japan/boduo’: No such file or directory
+	 
+	 mkdir -p /tmp/Japan/boduo
+	     1.-p 表示递归创建，此时创建成功
+	 
+	 mkdir /temp/Japan/cangjing /tmp/Japan/longze
+	     1.与Windows不同，mkdir支持同时创建多个目录  
+	 
+
+目录处理命令cd：
+	英文原意 change directory
+	所在路径 shell内置命令
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ type cd
+		cd is a shell builtin
+	abidingai@abidingai-W65KJ1-KK1:~$ type ls
+		ls is aliased to `ls --color=auto'
+
+	
+	cd /tmp/Japan/boduo 切换到指定目录
+	cd ..  回到上一级目录 (.表示当前目录)
+	cd ../.. 回到前两级目录
+	
+
+目录处理命令pwd：
+	英文原意 print working directory
+	所在路径 /bin/pwd
+	
+	pwd 
+	 /tmp/Japan/boduo 打印了当前所在目录的绝对路径
+	
+
+目录处理命令：rmdir	
+	英文原意 remove empty directories
+	所在路径 /bin/rmdir
+	
+	rmdir /tmp/Japan/boduo
+	   需要注意的是rmdir只能删除空目录
+	
+	
+目录处理命令：cp	
+	英文原意 copy
+	所在路径 /bin/cp
+	
+	cp /etc/apt/sources.list /tmp/Japan
+	   如果要复制的是一个文件，那么直接这样写即可，不要要添加选项
+	
+	cp -r /etc/apt /tmp/Japan
+	   如果要复制的是一个目录，那么需要加上参数 -r
+
+
+目录处理命令: mv
+	英文原意 move
+	所在路径 /bin/mv
+	语法说明 mv [原文件或目录] [目标目录]
+	功能描述 剪切文件、给文件改名
+	
+	mv /tmp/Japan/cangjing /root
+	将tmp目录下的Japan目录下的cangjing 剪切到root目录下
+	
+	mv /tmp/Japan/longze /root/nvshen 
+	mv longze nvshen 
+	在剪切的同时也可以改名，所以如果就在当前目录，那么可以该命令改名
+	
+	
+目录处理命令：rm
+	英文原意：remove
+	所在路径：/bin/remove
+	语法说明：rm -rf [文件或目录]
+		  rm -r 删除目录
+		  rm -f 强制执行
+		  
+	cp /etc/grub.conf /root
+	rm -f grub.conf
+	删除文件并强制执行
+	
+	rm -f /tmp/Japan
+	会提示这是一个目录无法删除，此时需要用-r选项
+	
+	
+

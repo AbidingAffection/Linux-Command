@@ -1,0 +1,51 @@
+
+用户管理命令 useradd
+	功能描述：添加新用户 
+	所在路径： /usr/sbin/useradd 	 
+	 
+	useradd tester
+	      创建新用户tester，只是添加了家目录(Ubuntu中好像没有)，然后分配了命令解释器
+
+
+用户管理命令 passwd
+	功能描述：设置用户密码
+	所在路径： /usr/bin/passwd 	 
+		 
+	passwd tester
+	      如果使用root用户登录，这个时候便会提示给用户tester设置密码
+	      
+	passwd 
+	      如果使用tester登录，那么此时修改的就是自己的密码
+	      
+	 
+用户管理命令 who
+	功能描述：查看用户登录信息
+	所在路径： /usr/bin/who 	 
+		 
+	who
+	     使用who得到的结果如下
+	     abidingai :0           2021-02-03 04:55 (:0)
+             除此以外，网课中还有如下的结果
+             root       tty1        2014-03-11 18:29
+             root       pts/0       2014-03-14 09:27(192.168.198.1)
+             yangmi     pts/1       2014-03-14 10:15(192.168.198.1)
+             其中 tty表示本地终端 pts表示远程终端 数字是用来区分的
+
+
+用户管理命令 w
+	功能描述：查看用户登录的 详细信息
+	所在路径： /usr/bin/w	 
+		 
+	w
+	   使用 w 得到的结果如下
+	   17:26:01 up 12:31,  1 user,  load average: 1.18, 0.62, 0.44
+	   USER     TTY  FROM  LOGIN@  IDLE   JCPU   PCPU WHAT
+	   abidinga :0   :0    04:55   ?xdm?  36:53  0.00s /usr/lib/gdm3/gdm-x-session --run-scrip
+           up表示Linux稳定运行的时间，即没有重启或者关机的时间，是衡量一个服务器稳定的指标。
+           load average表示过去1分钟 5分钟 15分钟 系统的负载情况
+           IDLE 表示用户登录过来 已经空闲多久了
+           JCPU 表示用户登录过来占用的CPU时间
+           PCPU WHAT 表示当前用户正在执行的命令和占用的CPU时间
+
+
+

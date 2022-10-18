@@ -1,0 +1,83 @@
+
+
+注销时生效的环境变量配置文件
+	~/bash_logout
+	
+	该文件的内容默认为空，在注销的时候，该文件的内容会自动执行。
+	abidingai@abidingai-W65KJ1-KK1:~$ vi .bash_logout 
+	1 # ~/.bash_logout: executed by bash(1) when login shell exits.
+	2 
+	3 # when leaving the console clear the screen to increase privacy
+	4 
+	5 if [ "$SHLVL" = 1 ]; then
+	6     [ -x /usr/bin/clear_console ] && /usr/bin/clear_console -q
+	7 fi
+
+
+其他配置文件
+	~/bash_history
+	我们使用history查看得到的所有命令都写在了这个文件当中，当然现在登录后敲击的命令并不会保存。
+	只有当我们使用history -w 或者注销登录之后才能 将内存中的历史命令写入该文件中。
+
+
+Shell登录信息
+	本地终端登录信息: /etc/issue
+	转义符		作用
+	 \d		显示当前系统日期
+	 \s		显示操作系统名称
+	 \l		显示登录的终端号，这个比较常用
+	 \m		显示硬件体系结构，如i386、i686
+	 \n		显示主机名
+	 \o		显示域名
+	 \r		显示内核版本
+	 \t		显示当前系统时间
+	 \u		显示当前登录用户的序列号
+	 
+	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

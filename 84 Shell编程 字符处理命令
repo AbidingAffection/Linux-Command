@@ -1,0 +1,56 @@
+
+排序命令sort
+	sort [选项] 文件名
+		 -f			忽略大小写
+		 -n			以数值型进行排序，默认使用字符串型排序
+		 -r			反向排序
+		 -t			指定分隔符，默认的分隔符是制表符
+		 -k n[,m]	按照指定的字段范围排序，从第n字段开始，m字段结束
+		
+	如图是排序密码文件，默认通常第一个是root，但是排序后则是从字母a~z的顺序
+	abidingai@abidingai-W65KJ1-KK1:~$ sort /etc/passwd
+		abidingai:x:1000:1000:AbidingAi,,,:/home/abidingai:/bin/bash
+		_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+		avahi-autoipd:x:109:116:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/usr/sbin/nologin
+		avahi:x:115:121:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/usr/sbin/nologin
+		backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+
+	使用-r 则是反过来，从z~a的顺序
+	abidingai@abidingai-W65KJ1-KK1:~$ sort -r /etc/passwd
+		www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+		whoopsie:x:120:125::/nonexistent:/bin/false
+		uuidd:x:107:114::/run/uuidd:/usr/sbin/nologin
+
+	如果我想使用用户的uid进行排序，但是此处可以看见它把uid当成了字符串型，所以1和10和1000排在了一起
+	abidingai@abidingai-W65KJ1-KK1:~$ sort -t":" -k 3,3 /etc/passwd
+		root:x:0:0:root:/root:/bin/bash
+		daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+		uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+		systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+		abidingai:x:1000:1000:AbidingAi,,,:/home/abidingai:/bin/bash
+		tester:x:1001:1001::/home/tester:/bin/sh
+
+	所以次数还要加上-n指令，才能得到我们真正想要的结果
+	abidingai@abidingai-W65KJ1-KK1:~$ sort -t":" -n -k 3,3 /etc/passwd
+		root:x:0:0:root:/root:/bin/bash
+		daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+		bin:x:2:2:bin:/bin:/usr/sbin/nologin
+		sys:x:3:3:sys:/dev:/usr/sbin/nologin
+		sync:x:4:65534:sync:/bin:/bin/sync
+		games:x:5:60:games:/usr/games:/usr/sbin/nologin
+
+
+统计命令wc
+	wc [选项] 文件名
+		-l		只统计行数
+		-w		只统计单词数
+		-m		只统计字符数
+		
+	abidingai@abidingai-W65KJ1-KK1:~$ wc -l /etc/passwd
+		50 /etc/passwd
+	abidingai@abidingai-W65KJ1-KK1:~$ df -h | wc -l
+		30
+
+
+
+

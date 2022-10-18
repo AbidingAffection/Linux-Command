@@ -1,0 +1,55 @@
+
+alias 命令别名:
+	语法说明： alias 别名='原命令'
+	
+	alias vi='vim'
+		#敲入vi相当于敲了vim
+
+	alias
+		#查看所有的命令别名
+		alias egrep='egrep --color=auto'
+		alias fgrep='fgrep --color=auto'
+		alias grep='grep --color=auto'
+		alias l='ls -CF'
+		alias la='ls -A'
+		alias ll='ls -alF'
+		alias ls='ls --color=auto'
+		alias vi='vim'
+		
+	vi .bashrc
+		#修改root用户的别名文件，这样修改之后是永久生效的
+		
+	unalias 别名
+		#删除别名
+		
+	命令执行时顺序
+	1、第一顺位执行用绝对路径或相对路径执行的命令
+	2、第二顺位执行别名
+	3、第三顺位执行Bash的内部命令
+	   (比如cd 命令 where is cd 你只能看见cd的帮助文档)
+	4、第四顺位执行按照$PATH环境变量定义的目录查找顺序找到的第一个命令
+	   (可以使用echo $PATH 进行打印)
+	因为命令执行顺序的存在，所以你的别名会覆盖原名，比如这里的vi就会覆盖实际的vi
+	所以最好你的别名是不和已有的指令同名。
+	
+			
+Bash常用快捷键
+	ctrl+A：把光标移动到命令行开头
+	ctrl+E：把光标移动到命令行结尾
+	
+	ctrl+C：强制终止当前的命令
+	ctrl+L：清屏，相当于clear命令
+	
+	ctrl+U：删除或剪切光标之前的命令(比退格键一个一个删方便)
+	ctrl+K：删除或剪切光标之后的命令
+	ctrl+Y：粘贴ctrl+U或者ctrl+D剪切的内容
+	
+	ctrl+R：在历史命令中搜索，可以搜索出历史命令
+	ctrl+D：退出当前终端
+	ctrl+Z：暂定并放入后台(牵扯工作管理的内容，在系统管理章节介绍)
+	
+	ctrl+S：暂停屏幕输出
+	ctrl+Q：恢复屏幕输出
+		
+
+	

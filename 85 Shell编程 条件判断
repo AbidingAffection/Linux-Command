@@ -1,0 +1,119 @@
+
+按照文件类型进行判断
+	测试选项		作用
+	-b 文件		判断该文件是否存在，并且是否为块设备文件，是则返回为真
+	-c 文件		判断该文件是否存在，并且是否为字符设备文件，是则返回为真
+	
+	(最常用的是这三个)	
+	-d 文件		判断该文件是否存在，并且是否为目录文件，是则返回为真
+	-e 文件		判断该文件是否存在，是则返回为真
+	-f 文件		判断该文件是否存在，并且是否为普通文件，是则返回为真
+
+	-L 文件		判断该文件是否存在，并且是否为符号链接文件，是则返回为真
+	-p 文件		判断该文件是否存在，并且是否为管道文件，是则返回为真
+	-s 文件		判断该文件是否存在，并且是否为为非空，非空则返回为真
+	-S 文件		判断该文件是否存在，并且是否为套接字文件，是则返回为真
+
+	因为test命令并没有返回结果，所以我们需要用echo $? 来判断上一条命令是否正确执行
+	如果正确执行了则返回0 错误执行则返回1 
+	另外在Shell脚本中，我们通常使用的是[ -e student ] 而不是test这种命令格式(记得前后都有空格)
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ test -e student 
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ echo $?
+		0
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ test -e ssssss 
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ echo $?
+		1
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ [ -e student ]
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ echo $?
+		0
+
+	但是如果用 $? 就显得很麻烦，此时可以考虑使用 && echo "yes" || echo "no"
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ [ -e student ] && echo "yes" || echo"no"
+		yes
+	
+
+判断文件权限
+	测试选项		作用
+	-r 文件		判断该文件是否存在，并且该文件是否拥有读权限，是则返回真
+	-w 文件		判断该文件是否存在，并且该文件是否拥有写权限，是则返回真
+	-x 文件		判断该文件是否存在，并且该文件是否拥有执行权限，是则返回真
+	(最常用的是上面这三个)	
+	
+	-u 文件		判断该文件是否存在，并且该文件是否拥有SUID权限，是则返回真
+	-g 文件		判断该文件是否存在，并且该文件是否拥有SGID权限，是则返回真
+	-k 文件		判断该文件是否存在，并且该文件是否拥有SBit权限，是则返回真
+
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ ll
+		-rw-rw-r-- 1 abidingai abidingai   58 3月  23 20:41 student
+		-rw-rw-r-- 1 abidingai abidingai  235 3月  12 21:04 test_rule
+
+	但是要注意，这里只要所有者，所属组和其他人只要一个有写权限，就都有返回yes
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ [ -w student ] && echo yes || echo no
+		yes
+
+
+两个文件之间进行比较
+	测试选项				作用
+	文件1 -nt 文件2		判断文件1的修改时间是否比文件2的新
+	文件1 -ot 文件2		判断文件1的修改时间是否比文件2的旧
+	文件1 -ef 文件2		判断文件1是否和文件2的Inode号一致，可以理解为两个文件是否为同一个文件。
+						这个判断用于判断硬连接是个很好的方法。
+
+	创建硬链接 并使用判断 -ef 
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ ln student /tmp/stu
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ [ student -ef /tmp/stu ] && echo yes || echo no
+	yes
+
+
+两个整数之间比较
+	测试选项				作用
+	整数1 -eq 整数2		判断整数1和整数2是否相等
+	整数1 -nq 整数2		判断整数1和整数2是否相等
+	整数1 -gt 整数2		判断整数1是否大于整数2
+	整数1 -lt 整数2		判断整数1是否小于整数2
+	整数1 -ge 整数2		判断整数1是否大于等于整数2
+	整数1 -le 整数2		判断整数1是否小于等于整数2
+
+	abidingai@abidingai-W65KJ1-KK1:~$ [ 23 -gt 22 ] && echo yes || echo no
+		yes
+	abidingai@abidingai-W65KJ1-KK1:~$ [ 23 -gt 23 ] && echo yes || echo no
+		no
+
+
+字符串的判断
+	测试选项				作用
+	-z 字符串			判断字符串是否为空
+    -n 字符串			判断字符串是否为非空
+	字符串1==字符串2		判断字符串1是否和字符串2相等
+	字符串1!=字符串2		判断字符串1是否和字符串2不等
+
+	检查name这个变量是否为空，为空返回yes，不为空返回no
+	abidingai@abidingai-W65KJ1-KK1:~$ name=shenchao
+	abidingai@abidingai-W65KJ1-KK1:~$ [ -z "$name" ] && echo yes || echo no
+		no
+
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=abc
+	abidingai@abidingai-W65KJ1-KK1:~$ bb=abc
+	abidingai@abidingai-W65KJ1-KK1:~$ [ "$aa"=="$bb" ] && echo yes || echo no
+		yes
+
+
+多重条件判断
+	测试选项				作用
+	判断1 -a 判断2		逻辑与，判断1和判断2都成立，最终的结果才为真
+	判断1 -o 判断2		逻辑或，判断1和判断2有一个成立，最终的结果为真
+	! 判断				逻辑非，使原始的判断式取反
+
+	判断变量aa是否存在，且变量aa的值是否大于23，满足上述条件则返回yes
+	abidingai@abidingai-W65KJ1-KK1:~$ [ -n "$aa" -a "$aa" -gt 23 ] && echo yes || echo no
+		bash: [: : integer expression expected
+		no
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=11
+	abidingai@abidingai-W65KJ1-KK1:~$ [ -n "$aa" -a "$aa" -gt 23 ] && echo yes || echo no
+		no
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=24
+	abidingai@abidingai-W65KJ1-KK1:~$ [ -n "$aa" -a "$aa" -gt 23 ] && echo yes || echo no
+		yes
+
+
+

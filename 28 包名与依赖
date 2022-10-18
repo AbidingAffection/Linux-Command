@@ -1,0 +1,58 @@
+
+RPM包命名规则
+	httpd-2.2.15-15.el6.centos.1.i686.rpm
+	httpd 		软件包名
+	2.2.15 	软件版本
+	15     	软件发布的次数
+	el6.centos 	适合的Linux平台
+	i686   	适合的硬件平台  	(noarch 表示任何硬件平台都可)
+	rpm 		rpm包扩展名
+	其中httpd叫作包名，而httpd-2.2.15-15.el6.centos.1.i686.rpm叫作包全名
+	
+	
+RPM包依赖
+	树形依赖：a->b->c
+	环形依赖：a->b->c->a   (需要把软件包abc同时用一条命令装)
+	模块依赖：模块依赖查询网站 www.rpmfind.net
+
+
+课程演示安装
+	mkdir /mnt/cdrom		(创建挂载点)
+	mount /dev/sr0 /mnt/cdrom	(进行挂载)
+	
+	cd /mnt/cdrom 			(此时就能看到光盘里的内容)
+	cd Packages			(rpm包都在这里，和压缩文件一样为红色)
+	
+	rpm -ivh mysql-connector-odbc-5.1.5r1144-7.el6.i686.rpm
+			(i表示安装 v表示详细信息 h表示显示安装过程)
+			(会显示error:Failed dependencies libodbcinst.so.2)
+			(其中以.so结尾的是库文件，不是单独的包，而是包含在某个内)
+			(所以只需要安装包含了这个库文件的包就可以补全这个so文件的依赖)
+			(这个so文件依赖的库文件可以去www.rpmfind.net上进行查询获得)
+	
+	
+yum在线管理简介
+	优点：自动到服务器上，解决依赖的问题
+	      不仅可以用网络，也可以用光盘作为yum源
+	缺点：如果是redhat系列，则需要收费，centos的好处是免费包括yum
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

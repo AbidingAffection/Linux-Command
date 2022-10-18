@@ -1,0 +1,41 @@
+
+Xinetd的含义
+	Xinetd是超级守护进程的含义，所以基于xinetd就是基于超级守护进程的服务。
+	
+安装xinetd与telnet
+	由于随着Linux版本的更迭，基于Xinetd的服务越来越少，现在只有不安全的telnet服务和网络备份服务sync
+	还在使用Xinetd，所以要学习使用这种服务管理，首先还要安装这两个环境。
+	
+	yum -y install xinetd
+	yum -y install telnet-server
+	
+	安装完成之后再 chkconfig --list可以看见
+	 	Xinetd本身是一个独立的服务，但是它自己又管理了很多的服务，并且有 "telnet: 关闭" 的字样
+	 	因为telnet的默认端口是23，待会我们可以通过验证23号端口是否开启来验证telnet服务是否开启
+	
+
+Xinetd服务的启动
+	vi /etc/xinetd.d/telnet
+	service telnet								服务的名称为telnet
+	{	
+		flags			= REUSE					标志为REUSE，能够TCP/IP socket可重用
+		socket_type 	= stream				使用TCP协议数据包
+		wait			= no					允许多个连接同时连接
+		user			= root					启动服务的用户为root
+		server 			= /usr/sbin/in.telnetd	服务的启动程序
+		log_on_failure 	+= USERID				登录失败后，记录用户的ID
+		disable			= no					服务不启动(这里为no，则表示服务启动)
+	}
+	
+	#所以我们重启xinetd服务就可以启动telnet服务
+	service xinetd restart
+	
+	使用netstat -tlun可以查看启动的端口和服务，此时可以看见 :::23 处于Listen状态，说明telnet服务启动 
+	
+	
+xinetd服务的自启动
+	方法1: chkconfig telnet on
+	方法2: ntsysv
+	(xinetd服务最大的问题是，它的自启动和启动，是通用的。所以你只要修改一个地方，另外的也同步修改了)
+	
+	

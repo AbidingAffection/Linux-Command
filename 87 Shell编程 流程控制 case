@@ -1,0 +1,51 @@
+
+多分支case条件语句
+	case语句和if...elif..else语句一样都是多分支条件语句，不过和if多分支条件语句不同的是，
+	case语句只能判断一种条件关系，而if语句可以判断多种条件关系。
+	
+
+	case $变量名 in
+		"值1")
+			如果变量值等于值1，则执行程序1
+			;;
+			
+		"值2") 
+			如果变量值等于值2，则执行程序2
+			;;
+		...省略其他分支...
+		*)
+			如果变量的值都不是以上的值，则执行此程序
+			;;
+	esac
+
+
+	判断用户输入脚本
+	#!/bin/bash
+	#Author: shenchao
+	
+	read -p "Please choose yes/no" -t 30 cho
+	case $cho in
+		"yes")
+			ehco "Your choose is yes!"
+			;;
+		"no")
+			ehco "Your choose is no!"
+			;;
+		*)
+			ehco "Your choose is error!"
+			;;
+	esac			
+	
+
+	运行结果
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./87_1.sh 
+		Please choose yes/no: yes
+		Your choose is yes!
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./87_1.sh 
+		Please choose yes/no: no
+		Your choose is no!
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./87_1.sh 
+		Please choose yes/no: Your choose is error!
+
+
+	

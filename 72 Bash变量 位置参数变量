@@ -1,0 +1,72 @@
+
+位置参数变量
+	位置参数变量	作用
+	    $n		n为数字，$0代表命令本身，$1~$9代表第一到九个参数，
+	 		十以上的参数要用大括号包含，如${10}
+	    $*		这个变量代表命令行中所有的参数，$*把所有的参数看成一个整体
+	    $@		这个变量也代表命令行中所有的参数，不过$@把每个参数区分对待
+	    $#		这个变量代表命令行中所有参数的个数
+	
+	paramater1.sh的内容如下
+	#!/bin/bash
+	echo $0
+	echo $1
+	echo $2
+	echo $3
+	    
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ vi paramater1.sh
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ chmod 755 paramater1.sh 
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./paramater1.sh 11 22 33
+	./paramater1.sh
+	11
+	22
+	33
+	***************************************************************************************
+	
+	paramater2.sh的内容如下
+	#!/bin/bash
+	num1=$1
+	num2=$2
+	sum=$(($num1+$num2))
+	echo $sum
+	
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./paramater2.sh 1 2
+	3
+	***************************************************************************************
+	
+	parameter3.sh的内容如下
+	#!/bin/bash
+	echo "A total of $# parameters"
+	echo "The parameters are: $*"
+	echo "The parameters are: $@"
+
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./paramater3.sh 1 22 333 4444
+	A total of 4 parameters
+	The parameters are: 1 22 333 4444
+	The parameters are: 1 22 333 4444
+	***************************************************************************************
+	
+	parameter4.sh的内容如下 (主要是为了说明 $*和$@ 的区别)
+	#!/bin/bash
+	for i in "$*"
+		#$*将所有的参数看成一个整体，所以这个for循环只会循环一次
+		do 
+			echo "The parameter is: $i"
+		done
+	x=1
+	for y in "$@"
+		#$@将每个参数都看成独立的，所以$@中有几个参数，就会循环几次
+		do
+			echo "The parameter $x is: $y" 
+			x=$(($x+1))
+		done
+
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./paramater4.sh 11 22 33
+	The parameter is: 11 22 33
+	The parameter 1 is: 11
+	The parameter 2 is: 22
+	The parameter 3 is: 33
+
+
+
+

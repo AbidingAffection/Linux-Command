@@ -1,0 +1,69 @@
+
+变量设置规则
+	1、变量名称可以由数字、字母和下划线组成。
+	   但是不能以数字开头。例如2name是错误的。
+	
+	2、在Bash中，变量的默认类型都是字符串型。
+	   如果要进行数值运算，则必须指定变量为数值型。
+
+	abidingai@abidingai-W65KJ1-KK1:~$ bash
+	abidingai@abidingai-W65KJ1-KK1:~$ name=sc
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $name
+	sc
+	abidingai@abidingai-W65KJ1-KK1:~$ 2name=sc
+	2name=sc: command not found
+
+	3、变量用等号连接值，等号左右两侧不能有空格
+	
+	4、变量的值如果有空格，需要使用单引号或者双引号包括
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ name="shen chao"
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $name
+	shen chao
+	
+	5、在变量的值中，可以使用"\"转义符
+	
+	6、如果需要增加变量的值，那么可以进行变量值的叠加。
+	   如果变量需要用双引号包含 "$变量名" 或用 "${变量名}" 包含
+		
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=123
+	abidingai@abidingai-W65KJ1-KK1:~$ aa="$aa"456
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=${aa}789
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $aa
+	123456789
+
+	7、如果是把命令的结果作为变量值赋予变量，
+	   则需要使用 反引号 或 $()包含命令
+	   
+	abidingai@abidingai-W65KJ1-KK1:~$ name=$(date)
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $name
+	2021年 03月 11日 星期四 11:41:26 CST
+
+	8、环境变量名建议大写，便于区分(因为系统命令都是小写)
+
+
+变量分类
+	用户自定义变量(最常用)
+	环境变量：主要保存的是和操作系统环境相关的数据
+		  有一部分可以修改值但是不能改名，可以添加新的环境变量
+	位置参数变量：主要用来向脚本当中传递参数或数据，变量名不能自定义，作用固定
+		      不能新建只能改值
+	预定义变量：Bash中已经定义好的变量，变量名不能自定义，作用固定
+	           不能新建只能改值 (位置参数变量是预定义变量的一种)
+
+	
+set与unset命令
+	set命令可以查看当前系统中已经定义的所有变量，
+	因为非常多，所以我们使用grep进行过滤：
+
+	abidingai@abidingai-W65KJ1-KK1:~$ set | grep aa
+	aa=123456789
+
+	unset用来删除变量
+	abidingai@abidingai-W65KJ1-KK1:~$ unset aa
+	abidingai@abidingai-W65KJ1-KK1:~$ set | grep aa
+	此时的结果为空
+	
+	
+
+

@@ -1,0 +1,51 @@
+
+引入
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=11
+	abidingai@abidingai-W65KJ1-KK1:~$ bb=22
+	abidingai@abidingai-W65KJ1-KK1:~$ cc=$aa+$bb
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $cc
+	11+22
+
+declare声明变量类型
+	命令格式: declare [+/-] [选项] 变量名
+			-: 给变量设置类型属性
+			+: 取消变量的类型属性
+		   -i: 将变量声明为整数型
+		   -x: 将变量声明为环境变量
+		   -p: 显示指定变量的被声明的类型
+		   
+	显示查看 变量aa的属性，刚开始是--，然后export之后变成了环境变量-x
+	abidingai@abidingai-W65KJ1-KK1:~$ declare -p aa
+	declare -- aa="11"
+	abidingai@abidingai-W65KJ1-KK1:~$ export aa
+	abidingai@abidingai-W65KJ1-KK1:~$ declare -p aa
+	declare -x aa="11"
+
+	数值运算方式1: declare -i
+	abidingai@abidingai-W65KJ1-KK1:~$ declare -i cc=$aa+$bb
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $cc
+	33
+
+	数值运算方式2: expr或let 数值运算工具
+	# dd=$(命令) 表示将命令的结果赋值给dd  而expr表示命令 另外+左右的空格不能省
+	abidingai@abidingai-W65KJ1-KK1:~$ dd=$(expr $aa + $bb)
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $dd
+	33
+	
+	数值运算方式3: $((运算式)) 或 $[运算式]
+	abidingai@abidingai-W65KJ1-KK1:~$ ff=$((aa+bb))
+	abidingai@abidingai-W65KJ1-KK1:~$ gg=$[aa+bb]
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $ff $gg
+	33 33
+
+	常见数值运算符测试
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=$[(11+3)*3/2]; echo $aa
+	21
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=$[(14%3)]; echo $aa
+	2
+	abidingai@abidingai-W65KJ1-KK1:~$ aa=$[1&&0]; echo $aa
+	0
+
+
+
+

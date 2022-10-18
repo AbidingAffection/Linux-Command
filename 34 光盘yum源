@@ -1,0 +1,34 @@
+
+光盘yum源搭建步骤
+	1.挂载光盘 mount /dev/cdrom /mnt/cdrom
+	
+	2.让网络yun源失效
+		   cd /etc/yum.repos.d
+		   mv CentOS-Base.repo CentOS-Base.repo.bak
+		   mv CentOS-Debuginfo.repo  CentOS-Debuginfo.repo.bak
+		   mv CentOS-Vault.repo CentOS-Vault.repo.bak
+		mount命令进入后，我们会发现有如下四个yum源：
+		   CentOS-Base.repo
+		   CentOS-Debuginfo.repo 
+		   CentOS-Media.repo
+ 		   CentOS-Vault.repo
+ 		我们需要使用的是第三个，CentOS-Media.repo，所以我们需要让另外三个失效
+ 		一种方法是把剩下的三个都删掉，另一种方法是将三个中的配置enable都改成false
+ 		但还有一种更好的办法，就是改后缀名，因为系统是通过.repo文件后缀来识别的
+
+	3.修改让光盘yum源生效
+		vim CentOS-Media.repo
+		注释下列两个不存在的地址，改为你自己的挂载地址
+		# file:///media/cdrom
+		# file:///media/cdrecorder (file://是协议名 类似http://)
+		baseurl=file:///mnt/cdrom
+		将enable是设置为1
+		enable=1
+			
+	4.检查是否生效 
+		yum list
+		之前查看得到的结果是CentOS-Base.repo中的名字 base
+		如果修改生效后，我们发现名字属性会更改为 xx-meida
+
+
+		

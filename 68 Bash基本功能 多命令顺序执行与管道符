@@ -1,0 +1,88 @@
+
+dd 磁盘拷贝命令
+	功能介绍: cp命令只能复制文件，dd命令可以复制特殊文件，分区甚至整个硬盘
+		  dd命令办不用来复制文件，主要是用来磁盘复制
+	命令格式: dd if=输入文件 of=输出文件 bs=字节数 count=个数
+		  if=输入文件	指定源文件或源设备
+		  of=输出文件	指定目标文件或目标设备
+		  bs=字节数	指定一次输入/输出多少字节，即把这些字节看做一个数据块
+		  count=个数	指定输入/输出多少个数据块
+		  
+grep 搜索命令
+	命令格式: grep [选项] "搜索内容" 文件名
+		        -i	忽略大小写
+		        -n	输出行号
+		        -v	反向查找
+		   -color=atuo 把搜索出的关键字用颜色显示
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ grep "root" /etc/passwd
+		root:x:0:0:root:/root:/bin/bash
+
+
+多命令顺序执行
+	多命令顺序执行符	格式		作用
+			
+	;			命令1;命令2	多个命令顺序执行，命令之间没有任何逻辑关系
+				
+	&&			命令1&&命令2	逻辑与 	当命令1正确执行，命令2才会执行
+							当命令1执行不正确，命令2不会执行
+		
+	||			命令1||命令2	逻辑或	当命令1正确执行，命令2不会执行
+							当命令1不正确执行，命令2才会执行
+							
+	ls ; cd/user ; date
+		abc        Android       baidunetdiskdownload  Documents  GNS3   Pictures  
+		anaconda3  baidunetdisk  Desktop               Downloads  Music  Public   
+		bash: cd/user: No such file or directory
+		2021年 03月 08日 星期一 20:01:04 CST
+
+	date; dd if=/dev/zero of=/tmp/testfile bs=1k count=10000 ;date
+		#这个命令的主要作用创建一个将近100MB的文件需要多长时间
+		#如果改变if=/dev/sda of=/dev/sdb 那么就是把一块硬盘复制到另一块硬盘
+		2021年 03月 08日 星期一 20:14:46 CST
+		100000+0 records in
+		100000+0 records out
+		102400000 bytes (102 MB, 98 MiB) copied, 0.241116 s, 425 MB/s
+		2021年 03月 08日 星期一 20:14:46 CST
+		
+	cd /tmp
+	ll
+		-rw-rw-r--  1 abidingai abidingai 102400000 3月   8 20:14 testfile
+
+
+	abidingai@abidingai-W65KJ1-KK1:~$ ls && echo yes
+		anaconda3  baidunetdisk          Desktop    Downloads  Music     Public  Templates
+		Android    baidunetdiskdownload  Documents  GNS3       Pictures  snap    Videos
+		yes
+	abidingai@abidingai-W65KJ1-KK1:~$ ls abcd && echo yes
+		ls: cannot access 'abcd': No such file or directory
+
+	./configure && make && make install
+		#只有环境正确 才会执行编译 只有编译正确才会执行安装
+		
+	abidingai@abidingai-W65KJ1-KK1:~$ ls abcd || echo no
+		ls: cannot access 'abcd': No such file or directory
+		no
+	abidingai@abidingai-W65KJ1-KK1:~$ ls || echo no
+		anaconda3  baidunetdisk          Desktop    Downloads  Music     Public  Templates
+		Android    baidunetdiskdownload  Documents  GNS3       Pictures  snap    Videos
+
+	命令 && echo yes || echo no
+		# 如果命令正确执行，则执行echo yes，ehco no不会执行
+		# 如果命令错误执行，则不执行echo yes, echo no会执行
+	
+
+管道符(|)
+	#逻辑或是 || 管道符是 |
+	命令格式：命令1 | 命令2
+		# 命令1的正确输出作为命令2的操作对象 (如果命令1没有正确输出则命令2不能执行)
+		
+	ll -a /etc/ | more
+	
+	netstat -an | grep ESTABLISHED
+		#把netstat -an的输出作为grep命令的操作对象
+		udp        0      0 10.1.60.87:68           10.1.0.1:67             ESTABLISHED
+
+	
+
+

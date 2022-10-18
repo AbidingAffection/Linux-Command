@@ -1,0 +1,73 @@
+
+echo输出命令:
+	语法说明： echo [选项] [输出内容]
+	          -e 支持反斜线控制的字符转换
+	
+	echo "hello world"
+		#如果你输出的内容中间有空格，则要使用双引号
+		hello world
+
+	echo 'hello world!'
+		#！在linux系统中有特殊的意义，这里使用单引号
+		hello world!
+		
+	支持的常用反斜线转换
+		\\		输出\本身
+		\a		输出警告音
+		\b		退格键，也就是向左删除
+		\c		取消输出行末的换行符，和-n选项一致
+		\e		ESCAPE键
+		\f		换页符
+		\n		换行符
+		\r		回车键
+		\t		制表符，也就是Tab键
+		\v		垂直制表符
+		\0nnn		按照八进制ASCII码表输出字符。
+		\xhh		按照十六进制ASCII码表输出字符。
+		
+		
+	echo -e "ab\bc"
+		ac
+
+	echo -e "a\tb\tc\nd\te\tf"
+		a	b	c
+		d	e	f
+	
+	echo -e "\e[1;31m abcd \e[0m"
+		#输出红色的abcd \e表示支持特殊符号 [1;开启颜色输出 31m表示红色 
+ 		abcd 
+
+		
+第一个脚本
+	#!/bin/bash
+	#shenchao (weibo.com/lampsc)
+
+	echo "Mr.shen is the most honest man in Lampbrother!"
+	
+
+如何执行脚本
+	赋予执行权限，直接运行
+		chmod 755 hello.sh
+		./hello.sh
+	
+	通过Bash调用执行脚本
+		bash hello.sh
+
+	chmod 755 hello.sh 
+	./hello.sh 
+		Mr.shen is the most honest man in Lampbrother!
+
+	bash hello.sh 
+		Mr.shen is the most honest man in Lampbrother!
+
+	#有时候我们在Windows系统中编写好的Shell脚本，因为回车符是^M$ 而Linux是$
+	#所以我们要做相关的转换，这个不需要我们手工来做，有专门的指令
+	dos2unix Tetrish.sh
+	
+	#可以通过 cat -A Tetrish.sh 查看文件的所有内容，包括隐藏字符
+	#就可以看见所有的回车符都从 ^M$变成了$
+	
+	#如果 dos2unix这条指令并未安装，我们可以通过yum指令进行安装
+	yum -y install dos2unix
+	
+

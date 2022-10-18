@@ -1,0 +1,53 @@
+
+1、安装准备
+	安装C语言编译器
+	下载源码包 http://mirror.bit.edu.cn/apache/httpd
+	
+	安装C语言编译器 之前使用的是yum安装 可以通过下列指令确认
+	rpm -q gcc
+
+	
+2、安装注意事项
+	源代码保存位置：/usr/local/src
+	软件安装位置：/usr/local
+	如何确定安装过程报错： 安装过程停止 并出现error warning或者no的提示
+	
+
+3、源码包安装过程
+	下载源码包
+	解压缩下载的源码包
+	进入解压缩目录
+	
+	1.先使用传输工具将Windows中的httpd包传输到linux中
+	2.使用tar -zxvf httpd-2.2.9.tar.gz解压
+	3.使用du命令查看目录大小 du -sh httpd-2.2.9
+	4.进入解压缩目录(不能省略) cd httpd-2.2.9
+	  进入目录之后可以看见有大写的INSTALL和README，大写的文件一般是说明或者配置
+	5.打开INSTALL文件(安装说明)之后，会有以下的四行，是安装的步骤说明
+	  ./configure --prefix=PREFIX
+	  make
+	  make install
+	  PREFIX/bin/apachectl start
+	6.第一步执行 ./configure --prefix=/usr/local/apache2
+	    ./configure 表示进行软件配置与检查，该命令可以有以下的功能
+	        定义所需要的功能选项，可以挑选的非常多
+	        检测系统环境是否符合安装要求
+	        把定义好的功能选项和检测系统环境的信息都写入Makefile文件，用于后续的编辑
+	    我们不需要那么多设置，只需要定义安装目录即可，--prefix=/usr/local/apache2
+	  第二步执行 make
+	    在make install之前都不会真正写入任何文件，所以现在还没有apache2目录
+	    如果前两步出错，不需要删除任何文件，因为根本没写入，只需要make clean
+	    清空编译产生的临时文件即可
+	  -------------------------------------------------------------------------
+	  第三步执行 make install
+	    此时才会真正的写入文件,make install完成后就可以用上文提到的
+	    PREFIX/bin/apachectl start 运行Apache
+	 
+	
+4、关于卸载
+	源码包是没有卸载命令的，所以如果需要卸载，直接用rm -rf移除文件即可
+	不会有任何的文件残留
+
+
+	
+	

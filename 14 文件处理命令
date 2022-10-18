@@ -1,0 +1,124 @@
+关于-f：
+	-f 表示force, rm -rf
+	-f 表示file, tar -f
+	-f 表示fluctuate，tail -f 
+
+文件处理命令touch：
+	功能描述：创建空文件
+	所在路径： /bin/touch
+	
+	touch /tmp/Japanlovestory.list
+	      在tmp目录下创建了空文件 Japanlovestory.list
+	      几乎所有的特殊符号，除了表示根目录的/，在Linux中都是合法的文件名
+	      不建议使用带空格的文件名 如果要使用的话，需要带上双引号 touch "program files"
+	     
+	touch /tmp/"program files"
+	      创建空文件，名字叫作program files，但是不建议这样使用，因为后续你删除或者查询
+	      都需要对program files加上双引号进行操作
+	 
+	 
+文件处理命令cat：
+	功能描述：显示文件(与more和less的区别在于，它是直接给你显示完了，没有你再按什么pageup/↑，光标直接到下一条指令了)
+	所在路径： /bin/cat
+	
+	cat /etc/issue
+	      使用cat指令查看本机系统的信息，得到的结果如下
+	      Ubuntu 20.04.1 LTS \n \l
+	      .......
+
+	cat -n /etc/issue
+	      使用-n指令，可以查看的时候，还附带了行号   
+	      1 Ubuntu 20.04.1 LTS \n \l
+     	      2	
+
+	cat -n /etc/services
+	      获得了较长的内容，但是只停留在了最后一页，cat不适合查看这种较长的文件
+	      
+	      
+文件处理命令tac：
+	功能描述：反向显示文件内容
+	所在路径： /usr/bin/tac
+	
+	tac /etc/issue
+	      使用tac指令查看本机系统的信息，得到的结果如下
+	      .......
+	      Ubuntu 20.04.1 LTS \n \l
+
+文件处理命令：more
+	功能描述：分页显示文件内容
+	所在路径：/bin/more
+	
+	more /etc/services
+		小的子命令，通常使用空格或者f来进行翻页；使用Enter进行换行；
+		使用q或者Q进行退出，但是只能用鼠标向上翻页。
+		得到的内容如下：
+		# Network services, Internet style
+		#
+		# Note that it is presently the policy of IANA to assign a single well-known
+		# port number for both TCP and UDP; hence, officially ports have two entries
+		# even if the protocol doesn't support UDP operations.
+		#
+		# Updated from https://www.iana.org/assignments/service-names-port-numbers/servi
+		ce-names-port-numbers.xhtml .
+		#
+		# New ports will be added on request if they have been officially assigned
+		# by IANA and used in the real-world or are needed by a debian package.
+		# If you need a huge list of used numbers please install the nmap package.
+
+		tcpmux		1/tcp				# TCP port service multiplexer
+		echo		7/tcp
+		echo		7/udp
+		discard		9/tcp		sink null
+		discard		9/udp		sink null
+		systat		11/tcp		users
+		daytime		13/tcp
+		daytime		13/udp
+		netstat		15/tcp
+		qotd		17/tcp		quote
+		--More--(5%)
+
+		
+文件处理命令：less
+	功能描述：分页显示文件内容
+	所在路径：/bin/less
+	
+	less /etc/services
+		与more最大的区别是可以向上翻页，使用pageup是一页一页往上翻，使用↑是一行一行往上翻。
+		还可以支持搜索，通过/keyword 回车后所有的关键词都会高亮，按n键(表示next)可以找下一个。
+		
+
+文件处理命令：head
+	功能描述：显示指定文件前几行
+	所在路径：/usr/bin/head
+	
+	head -5 /etc/services
+		得到的显示内容如下，默认显示：
+		# Network services, Internet style
+		#
+		# Note that it is presently the policy of IANA to assign a single well-known
+		# port number for both TCP and UDP; hence, officially ports have two entries
+		# even if the protocol doesn't support UDP operations.
+
+
+文件处理命令：tail
+	功能描述：显示指定文件最后几行
+	所在路径：/usr/bin/tail
+	
+	tail -5 /etc/services
+		得到的显示内容如下，默认显示后10行：
+		dircproxy	57000/tcp			# Detachable IRC Proxy
+		tfido		60177/tcp			# fidonet EMSI over telnet
+		fido		60179/tcp			# fidonet EMSI over TCP
+
+		# Local services
+	
+	
+	tail -f /var/log/syslog
+		监控日志文件，可以实时显示出电脑中发生了什么变化，执行了哪些内容。
+		比如打字的时候，之歌日志文件就是再不断的进行滚动的，所以 -f 表示动态变化。
+		Jan 31 01:59:15 abidingai-W65KJ1-KK1 /usr/lib/gdm3/gdm-x-session[2104]:
+		2021-01-31 01:59:15:554 [2104:140475816147072] SOGOU: virtual bool CSogouShellPCPy::
+		NeedInsert(int) INFO: -----------======---capital = 0, vkey = 27, laskkey = 27, down = 0.
+
+		
+

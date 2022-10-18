@@ -1,0 +1,59 @@
+
+1、useradd命令格式
+	useradd [选项] 用户名
+	        -u 	UID		手工指定用户的UID号
+	        -d 	家目录		手工指定用户的家目录
+	        -c 	用户说明	手工指定用户的说明
+	        -g 	组名		手工指定用户的初始组
+	        -G 	组名		指定用户的附加组
+	        -s 	shell		手工指定用户登录的shell 默认是/bin/bash
+
+	useradd sc
+	passwd sc  
+	
+	执行完上述的两条命令之后，我们检查对应的用户信息文件中，发生改变的地方
+		1.grep sc /etc/passwd
+		2.grep sc /etc/shadow
+		3.grep sc /etc/group
+		4.grep sc /etc/gshadow
+		5.ll -d /home/sc
+		6.ll /var/spool/mail/sc
+		
+		1.sc:x :504:504::/home/sc:/bin/bash
+		2.sc:XX(加密后密码)XX:16076:0:99999:7:::
+		3.sc:x:504
+		4.sc:!::
+		5.drwx------. 3 sc sc 4096 1月 6 19:58 /home/sc
+		6.lampl rpc sc user1 user2
+
+
+2、指定选项添加用户
+	  useradd -u 666 -G root,bin -c "test user" -d /lingming liming
+	  	不推荐-g改用户的默认初始组，多个组可以用逗号隔开.
+	  grep liming /etc/passwd
+	  	得到 liming:x:666:666:test user:/liming:/bin/bash
+
+
+3、用户默认值文件
+	/etc/default/useradd
+		group=100		#用户默认组
+		Home=/home		#用户家目录
+		INACTIVE=-1		#密码过期宽限天数(shadow文件7字段)
+		EXPIRE=		#密码失效时间(shadow文件8字段)
+		SHELL=/bin/bash	#默认shell
+		SKEL=/etc/skel		#模板目录
+		CREATE_MAIL_SPOOL=yes	#是否建立邮箱
+
+	我们发现这里只定义了shadow中的第7和第8字段，其他字段定义在哪里呢？
+	
+	/etc/login.defs
+		PASS_MAX_DAYS 99999 	#密码有效期(shadow文件5字段)
+		PASS_MIN_DAYS 0	#密码修改间隔(shadow文件4字段)
+		PASS_MIN_LEN 5		#密码最小位数(现在采用PAM原则，该字段不生效)
+		PASS_WARN_AGE 7	#密码到期警告(shadow文件6字段)
+		UID_MIN 500		#最小UID
+		GID_MAX 60000		#最大UID
+		ENCRYPT_METHOD SHA512	#加密模式
+	
+
+

@@ -1,0 +1,75 @@
+
+文件处理命令find：
+	功能描述：文件搜索
+	所在路径： /bin/find
+	语法说明： find [搜索范围][匹配条件]
+		  
+			
+	find /etc -name init
+	      搜索etc目录下，所有文件名是init的文件，这是一个精准搜索，得到的结果如下：
+	      find: ‘/etc/ssl/private’: Permission denied
+	      find: ‘/etc/polkit-1/localauthority’: Permission denied
+	      /etc/apparmor/init
+	      find: ‘/etc/cups/ssl’: Permission denied
+	      /etc/init
+
+	find /etc -name *init*
+	      加上通配符之后，实现模糊搜素的功能，即所有包含了init的文件如下：
+	      通配符* 的含义是匹配任意字符，包括零个
+	      /etc/X11/xinit
+	      /etc/X11/xinit/xinitrc
+	      /etc/apparmor/init
+	      /etc/kernel/postinst.d/initramfs-tools
+	      /etc/kernel/postrm.d/initramfs-tools
+	      /etc/initramfs-tools
+              ......
+	      
+	find /etc -name init??
+	      假设你记得更清楚一点，你要找的文件是initxx，那么可以用通配符?，表示匹配单个字符
+	      得到的结果下： /etc/init.d
+	      因为Linux是严格区分大小写的，所以可以使用 -iname的选项，表示不区分大小写查找
+	      
+	find / -size +204800
+	      在根目录下查找大于100MB的文件 +n 大于 -n 小于 n等于
+	      此处的单位是数据块，在Linux系统中一个数据块 512字节 也就是0.5K
+	      所以1MB = 1024Kb = 2048 数据块 ，此处是查找大于 100MB的文件，得到的结果:
+	      ./media/abidingai/Storage/videos/Linux Command/106.16.2 备份与恢复-备份命令.mp4
+
+	find /home -user tester
+	      根据所有者查找 该目录下所有者为tester的文件
+	      相对应的也可以根据所属组查找，只是把-user 改成了-group
+	      
+	find /etc -cmin -5
+	      在/etc目录下查找5分钟内被修改过属性的文件和目录
+	      -amin 访问时间 access
+	      -cmin 文件属性 change
+	      -mmin 文件内容 modify
+	      
+	find /etc -size +163840 -a -size -204800
+	      在/etc目录下查找大于80MB 小于100MB 的文件
+	      -a 两个条件同时满足
+	      -o 两个条件满足任意一个即可
+	      
+	find /etc -name inittab -exec ls -l{}\;
+	      在/etc下查找inittab文件并显示其详细信息
+	      -exce/-ok 命令{}\; 对搜索结果执行操作，其中exce是直接执行，而ok会挨个询问
+	      {}表示find查找的结果 \表示转义符 ;表示结束 
+	      需要注意的是\; 是将find查询结果的每条内容拿出来执行，而要想将内容当做一个整体则需要使用\+
+	      !!!这个指令是非常强悍的，把ls换成cp/rm/mv等指令，可以实现批处理的复制，删除，改名
+	
+	find /etc -type f
+	      在/etc下查找所有文件
+	      f表示文件 d表示目录 l表示软链接文件  
+	      之前提到过inum 所有也可以根据 -inum进行查找
+	   
+
+补充说明：
+	任何一个文件都有自己的 inum 节点，我们可以通过 ls -i 进行查看
+	比如说，你想删掉一个文件，但是那个文件名太长 或者 文件名根本就是一个乱码
+	这个时候你只需要去查看这个inum编号 然后使用删除
+	find . -inum 31531 -exce rm {} \;
+	
+	   
+      
+	      
+

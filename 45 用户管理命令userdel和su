@@ -1,0 +1,47 @@
+
+
+
+1、删除用户 userdel
+	userdel [-r] 用户名
+		-r 删除用户的同时删除用户家目录
+
+	手工删除用户
+	vi /etc/passwd
+	vi /etc/shadow	(删除后，需要强制保存退出 :wq!)
+	vi /etc/group
+	vi /etc/gshadow  (删除后，需要强制保存退出 :wq!)
+	rm -rf /var/spool/mail/lamp
+	rm -rf /home/lamp
+
+	手工添加用户的操作太过繁琐，所以只演示手工删除用户
+
+
+2、查看用户 ID
+	id 用户名
+	
+	usermod -G root tester
+	id tester
+	得到的结果如下：uid=1001(tester) gid=1001(tester) groups=1001(tester),0(root)
+
+
+3、切换用户身份 su
+	su [选项] 用户名
+           -: 	选项只使用“-”代表连用户的环境变量一起切换
+           -c:  仅执行一次命令，而不切换用户身份
+        
+        su root
+        通过这样的方式切换到root用户之后，看起来很美好，但是环境变量却没切换过来
+        
+        env
+        使用env命令查看当前的环境变量，会发现系统识别的当前登录用户是USER=user1而不是Root
+        同时也会发现，家目录、邮箱等等信息都是user1而非root，所以我们其实只是有了root权限
+        这个时候执行某些操作的时候会出现莫名奇妙的报错
+           
+        su - root
+        所以实际上应该这么敲，另外退出的时候如要用exit，不然进程会一直在执行           
+	
+	su -root -c "useradd user3"
+	不切换成root，只是借用root身份执行useradd命令添加user1用户
+
+
+

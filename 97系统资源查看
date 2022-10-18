@@ -1,0 +1,107 @@
+
+1、vmstat命令监控系统资源
+	vmstat [刷新延时 刷新次数]
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ vmstat 2 3
+		procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+		 r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+		 0  0    0 4894700 108868 1717124    0    0   519    33  339 1198  7  2 90  1  0
+		 0  0    0 4893604 108868 1718208    0    0     0     0  983 2297  1  1 99  0  0
+		 0  0    0 4894384 108876 1717264    0    0     0    12 1105 2512  2  1 97  0  0
+
+
+2、dmesg开机时内核检测信息
+	demesg
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ dmesg | grep CPU
+		[    0.041491] smpboot: Allowing 4 CPUs, 0 hotplug CPUs
+		[    0.041540] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:4 nr_cpu_ids:4 nr_node_ids:1
+		[    0.069473] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+		[    0.083829] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=4.
+		[    0.086961] random: crng done (trusting CPU's manufacturer)
+		[    0.114154] mce: CPU0: Thermal monitoring enabled (TM1)
+		[    0.114185] MDS: Mitigation: Clear CPU buffers
+		[    0.116739] smpboot: CPU0: Intel(R) Core(TM) i5-7400 CPU @ 3.00GHz
+	因为dmesg的输出内容非常的多，所以这里配合grep命令使用获得有空的信息，比如这里可以看到CPU的版本
+	
+	
+3、free命令查看内存使用状态
+	free [-b|-k|-m|-g]
+		  -b: 以字节为单位显示
+		  -k: 以KB为单位显示，默认就是以KB为单位显示
+		  -m: 以MB为单位显示
+		  -g: 以GB为单位显示 
+		  
+	abidingai@abidingai-W65KJ1-KK1:~$ free -m
+				      total        used        free      shared  buff/cache   available
+		Mem:           7850        1307        4700         279        1841        5973
+		Swap:          2047           0        2047
+
+		补:缓存和缓存的区别
+		由于内存的运算和传输速度比硬盘快而且要快的多，也就是把部分数据放在内存的缓冲和缓存中。
+		简单来说缓存cache是用来加速数据从硬盘中读取的，而缓冲buffer是用来加速数据写入硬盘的。 
+
+
+4、查看CPU信息
+	cat /proc/cpuinfo
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ cat /proc/cpuinfo 
+		processor	: 0
+		vendor_id	: GenuineIntel
+		cpu family	: 6
+		model		: 158
+		model name	: Intel(R) Core(TM) i5-7400 CPU @ 3.00GHz
+		stepping	: 9
+		microcode	: 0xde
+		cpu MHz		: 1596.095
+		cache size	: 6144 KB	#二级缓存的大小，这个越大CPU性能越好
+		physical id	: 0
+		siblings	: 4
+		core id		: 0
+	
+	proc目录是保存的是内存的信息，一旦断电里面的数据便会消失，说明cpuinfo是每次开机检测之后得到
+	然后写入这个文件。
+
+
+6、查看系统与内核相关信息
+	uname [选项]
+		   -a: 查看系统所有相关信息
+		   -r: 查看内核版本
+		   -s: 查看内核名称
+
+	abidingai@abidingai-W65KJ1-KK1:~$ uname -a
+		Linux abidingai-W65KJ1-KK1 5.8.0-48-generic #54~20.04.1-Ubuntu SMP Sat Mar 20 13:40:25 			UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+
+	
+7、判断当前系统的位数
+	操作系统中并没有直接可以查看系统位数的指令，但是我们可以通过查看外部命令的信息，顺带查看位数信息
+	abidingai@abidingai-W65KJ1-KK1:~$ file /bin/ls
+		/bin/ls: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), dynamically linked
+
+
+8、查询当前Linux系统的发行版本
+	abidingai@abidingai-W65KJ1-KK1:~$ lsb_release -a
+		No LSB modules are available.
+		Distributor ID:	Ubuntu
+		Description:	Ubuntu 20.04.2 LTS
+		Release:	20.04
+		Codename:	focal
+
+
+9、列出进程打开或使用的文件信息
+	lsof [选项]
+		 -c 字符串: 只列出以字符串开头的进程打开的文件
+		 -u 用户名: 只列出某个用户的进程打开的文件
+		 -p pid: 	列出某个PID进程打开的文件	 
+	 
+	abidingai@abidingai-W65KJ1-KK1:~$ lsof -c bash
+		COMMAND   PID      USER   FD   TYPE DEVICE SIZE/OFF    NODE NAME
+		bash     9455 abidingai  cwd    DIR    8,2     4096 4718594 /home/abidingai
+		bash     9455 abidingai  rtd    DIR    8,2     4096       2 /
+		bash     9455 abidingai  txt    REG    8,2  1183448 1310813 /usr/bin/bash
+
+
+
+
+
+

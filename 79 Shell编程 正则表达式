@@ -1,0 +1,162 @@
+
+正则表达式与通配符
+	正则表达式用来在文件中匹配符合条件的字符串，正则是包含匹配。
+    grep、awk、sed等命令可以支持正则表达式。
+
+    通配符用来匹配符合条件的文件名，通配符是完全匹配。ls、find、cp
+    这些命令不支持正则表达式，所以只能使用Shell自己的通配符来进行匹配。
+
+    (简单记忆就是 Shell中 正则用来匹配字符串、通配符用来匹配文件名)
+
+
+基础正则表达式
+    元字符       作用
+    *           前一个字符匹配0次或任意多次，例如a* 表示a重复0~n次(通配符中*是任意多个字符)
+    .           匹配除了换行符以外任意一个字符(相当于通配符中的?)
+    ^           匹配行首。例如 ^hello 会匹配以hello开头的行
+    $           匹配行尾。例如 hello$ 会匹配以hello结尾的行
+    []          匹配中括号中指定的任意一个字符，只匹配一个字符,例如 [0-9]匹配任意一位数字
+                [aeiou]匹配任意一个元音字母，[a-z][0-9]匹配小写字母+任意一个数字(与通配符作用相同)
+    [^]         匹配除中括号的字符以外的任意一个字符。例如[^0-9]匹配任意一位非数字字符
+    \           转义符，用于取消特殊符号的含义(比如下面的 \{n\} 都是为了让{ }的含义消失)
+    \{n\}       表示其前面的字符恰好出现n次，例如[0-9]\{4\}匹配四个数字,[1][3-8][0-9]\{9\}匹配手机号码
+    \{n,\}      表示其前面的字符出现的次数不小于n次，例如[0-9]\{2,\}表示两位及以上的数字
+    \{n,m\}     表示其前面的字符出现的次数介于n和m之间，例如[a-z]\{6,8\}表示匹配6~8位小写字母
+
+
+测试文件内容如下
+    Mr.Li Ming said:
+    he was the honest man in LampBrother.
+    123despise him.
+
+    But since Mr.Shen Chao came,
+    he never saaaid thoes words.
+    555nice!
+
+    because,actuaaaally,
+    Mr.Shen Chao is the most honest man!
+
+    Later,Mr.Li Ming said his hot body.
+    
+    *************************************************************************************
+
+    使用grep "a*" test_rule 会匹配出所有的行， 包括空行 (因为重复0次也包含，所以这么写没意义)
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "a*" test_rule 
+    Mr.Li Ming said:
+    he was the honest man in LampBrother.
+    123despise him.
+
+    But since Mr.Shen Chao came,
+    he never saaaid thoes words.
+    555nice!
+
+    because,actuaaaally,
+    Mr.Shen Chao is the most honest man!
+
+    Later,Mr.Li Ming said his hot body.
+
+    *************************************************************************************
+
+    使用grep "aa*" test_rule 匹配至少包括1个a的行
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "aa*" test_rule 
+    Mr.Li Ming said:
+    he was the honest man in LampBrother.
+    But since Mr.Shen Chao came,
+    he never saaaid thoes words.
+    because,actuaaaally,
+    Mr.Shen Chao is the most honest man
+    Later,Mr.Li Ming soid his hot body.
+
+    *************************************************************************************
+    
+    使用grep "aa*" test_rule 匹配至少包括2个连续a的行
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "aaa*" test_rule 
+    he never saaaid thoes words.
+    because,actuaaaally,
+
+    *************************************************************************************
+
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "s..d" test_rule 
+    Mr.Li Ming said:
+    Later,Mr.Li Ming soid his hot body.
+
+    *************************************************************************************
+
+    因为是包含匹配，实际上颜色标识的区域为 s0id his hot bod
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "s.*d" test_rule 
+    Mr.Li Ming said:
+    he never saaaid thoes words.
+    Later,Mr.Li Ming soid his hot body.
+
+    *************************************************************************************
+
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "^M" test_rule 
+    Mr.Li Ming said:
+    Mr.Shen Chao is the most honest man
+
+    *************************************************************************************
+    
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "n$" test_rule 
+    Mr.Shen Chao is the most honest man
+
+    *************************************************************************************
+
+    匹配空白行，并显示空白行的行号
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep -n "^$" test_rule 
+    4:
+    8:
+    11:
+    13:
+
+    *************************************************************************************
+
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "s[ao]id" test_rule 
+    Mr.Li Ming said:
+    Later,Mr.Li Ming soid his hot body.
+
+    *************************************************************************************
+
+    匹配包含了数字的行    
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "[0-9]" test_rule 
+    123despise him.
+    555nice!
+
+    匹配不以数字开头的行
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "^[^0-9]" test_rule 
+    Mr.Li Ming said:
+    he was the honest man in LampBrother.
+    But since Mr.Shen Chao came,
+    he never saaaid thoes words.
+    because,actuaaaally,
+    Mr.Shen Chao is the most honest man
+    Later,Mr.Li Ming soid his hot body.
+
+    匹配不以字母开头的行
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "^[^a-zA-Z]" test_rule 
+    123despise him.
+    555nice!
+
+    *************************************************************************************
+    
+    匹配以 . 结尾的行
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "\.$" test_rule 
+    he was the honest man in LampBrother.
+    123despise him.
+    he never saaaid thoes words.
+    Later,Mr.Li Ming soid his hot body.
+
+    *************************************************************************************
+    
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "a\{3\}" test_rule 
+    he never saaaid thoes words.
+    because,actuaaaally,
+
+    *************************************************************************************
+
+    从理论上来说 \{3\} 和 \{3,\} 效果几乎是一样的，因为正则是包含匹配
+    abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/txt$ grep "[0-9]\{3\}" test_rule 
+    123despise him.
+    555nice!
+
+
+

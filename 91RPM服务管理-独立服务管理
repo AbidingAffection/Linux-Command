@@ -1,0 +1,38 @@
+
+RPM包安装的位置
+	/etc/init.d/: 独立服务的启动脚本位置
+	/etc/sysconfig/: 初始化环境配置文件位置
+	/etc/: 配置文件位置
+	/etc/xinetd.conf: xinetd配置文件
+	/etc/xinetd.d/: 基于xinetd服务的启动脚本
+	/var/lib/: 服务产生的数据
+	/var/log/: 日志
+	
+
+独立服务的启动
+	/etc/init.d/独立服务名 start|stop|status|restart
+	service 独立服务名 start|stop|status|restart (redhat系列专有的命令，所以正常都是第一种敲法)
+		service --status-all 是常见的service查询命令，可以看到所有的rmp服务和运行状态
+
+
+独立服务的自启动
+	1、chkconfig [--level 运行级别] [独立服务名] [on|off]
+		#查看当前apache的状态
+		chkconfig --list | grep httpd
+		#修改自启动状态为启用
+		chkconfig --level 2345 httpd on
+		(这个只能保证下次开机的时候，apache服务是自启动的，而本次有没有启动不知道)
+		(且这个的默认级别就是2345,所以不写也是一样的)
+		#修改自启动状态为关闭
+		chkconfig httpd off
+	
+	2、修改/etc/rc.d/rc.local文件  <---推荐使用
+		/etc/rc.local中的内容: (touch第一次建立文件，后面则是会修改文件的最后更新时间)
+		touch /var/lock/subsys/local  (所以我们只需要检查这个文件就知道系统最后开机时间)
+		#添加这样一行话，则也可以实现独立服务的自启动
+		/etc/init.d/httpd start
+	
+	3、使用ntsysv命令管理自启动
+		它会启动一个图形化界面，只需要在你想启动的服务前打上*即可(但是这也是redhat专有系列)
+		而且该命令还可以管理基于xinetd的服务(但是也不能管理基于源码包的服务)
+

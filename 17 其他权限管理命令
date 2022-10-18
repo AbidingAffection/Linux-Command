@@ -1,0 +1,80 @@
+
+文件处理命令chown：
+	功能描述：改变文件或目录的所有者
+	英文原意：change file ownship
+	所在路径： /bin/chown
+	语法说明： chown [用户][文件或目录]
+		  
+			
+	chown root abcd
+	      说明，我们用abidingai创建了一个文件夹abcd，然后尝试修改这个文件的所有者
+	      出现报错提示:chown: changing ownership of 'abcd': Operation not permitted
+	      切换到root模式，修改成功。因为在Linux系统中改变一个文件的所有者，只有管理员root可以做到
+	
+	su root
+	useradd tester
+	chown tester /tmp/abdc 
+	      说明，修改成功，-rw-rw-r-- 1 tester abidingai 0 2月   3 05:05 /tmp/abcd
+	      在实际的应用场景中，如果需要A来接替B的任务，那么最方便的方法就是 将任务文件的所有者修改
+	      例如这里，如果需要tester来接替完成abcd文件的编写，那么就用root改变该文件的所有者
+	      
+	
+文件处理命令chgrp：
+	功能描述：改变文件或目录的所属组
+	英文原意：change file group ownship
+	所在路径： /bin/chgrp
+	语法说明： chgrp [用户][文件或目录]
+		
+		  		
+	groupadd lampbrother
+	chgrp lampbrother /tmp/abcd
+	chmod g+w /tmp/abcd 
+	      说明，我们创建了一个所属组lampbrother，然后把abcd的文件所属组改成lampbrother
+	      修改成功后，在修改这个组的权限，使得该组中每个成员都享有该组的权限，不用一个个改了
+	      -rw-rw-r-- 1 tester lampbrother 0 2月   3 05:05 /tmp/abcd
+
+
+补充说明：
+	touch liuyifei
+	mkdir meinv
+              一个文件的默认所有者是文件的创建者，所属组是文件创建者的缺省组
+	      -rw-r--r-- 1 root root 0 2月   3 05:33 liuyifei
+	      drwxr-xr-x 2 root root 4096 2月   3 05:33 meinv
+
+	
+文件处理命令umask：
+	功能描述：显示、设置文件的缺省权限
+	英文原意：the user file-creation mask
+	所在路径： Shell内置命令
+	语法说明： umask [—S] 
+	          -S以rwx形式显示新建文件缺省权限
+		
+		  		
+	umask -S
+	      显示新建文件的缺省权限，此时在tmp目录下，得到 u=rwx,g=rwx,o=rx
+	      所以上文中，我们新建 meunv 目录的时候，得到的权限是 drwxr-xr-x
+	      在Linux中规定，缺省创建的文件是不具有执行权限的，所以touch liuyifei得到的权限是
+	      -rw-r--r-- 1 root root 0 2月   3 05:33 liuyifei 刚好比目录少了x
+	      (可以理解为 基于安全性的考虑，默认新建的文件是 不具有可执行权限的)
+	
+	umask 
+	      得到的是一组数字 0022 取后面三位 022 即 --- -w- -w-
+	      tmp目录下创建的目录权限为 drwxr-xr-x 2 root root 4096 2月   3 05:33 meinv
+              --- -w- -w-
+              rwx rwx rwx
+              rwx rwx r-x    实际上是做了逻辑与的关系，也是上面umask -S的来源
+	
+	      
+	umask 077
+	mkdir xiajie
+	      所以，通过修改umask的值，我们就修改了默认创建的目录的权限值
+	      因为777和077运算逻辑与运算后，得到的应该是 700，即rwx --- --- 
+	      drwx------ 2 abidingai abidingai 4096 2月   3 06:04 xiaojie
+	      又因为默认创建的文件是不具有执行权限的，所以如果再创建一个文件，其权限是rw- --- ---
+	      
+	就是说，你设置umask 022，然后用umask -S查看，发现现在的权限是rwx r-x r-x
+	那么你创建目录的时候，目录的权限就是rwx r-x r-x，你创建文件的时候，则会默认去掉x
+	此时，你创建的文件的权限就是rw- r-- r--。然后这个修改是暂时的，想要永久生效则需要修改/etc/bash.bashrc。
+
+	
+	

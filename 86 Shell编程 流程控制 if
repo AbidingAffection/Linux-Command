@@ -1,0 +1,149 @@
+
+单分支if条件语句
+	单分支if条件语句是只有在条件成立的时候才执行程序。
+	[ 条件判断式 ]就是前面一章说的条件判断，所以左右的空格不能省。
+		if [ 条件判断式 ];	then
+			程序
+		fi
+		
+		或者
+		
+		if [ 条件判断式 ] 
+			then
+				程序
+		fi
+	
+	
+	86.sh脚本的内容
+		#!/bin/bash
+		#Author: czn
+
+		#把根分区的使用率赋值给变量rate
+		rate=$(df -h | grep "/dev/sda2" | awk '{print $5}' | cut -d "%" -f1)
+
+		if [ $rate -ge 35 ]
+		then
+			echo "Warning!/dev/sda2 is full!"
+		fi
+
+
+	执行结果
+		abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./86_1.sh 
+		Warning!/dev/sda2 is full!
+
+
+双分支if条件语句
+	if [ 条件判断式1 ]
+		then
+			条件成立时，执行的程序
+		else
+			条件不成立时，执行的另一个程序
+	fi
+
+	备份mysql数据库
+	#!/bin/bash
+	#Author: shenchao
+	
+	#同步系统时间
+	ntpdate asia.pool.ntp.org &> /dev/nul
+	#把当前系统时间按照 年月日 格式赋给变量date
+	date=$(date +%y%m%d)
+	#统计mysql数据库的大小，并把赋给size变量
+	size=$(du -sh /var/lib/mysql)
+	
+	#如果备份目录存在
+	if [ -d /tmp/dbbak ] 
+		then
+			echo "Date: $date!" > /tmp/dbbak/dbinfo.txt
+			echo "Data size: $size" >> /tmp/dbbak/dbinfo.txt
+			cd /tmp/dbbak
+			tar -zcf mysql-lib-$date.tar.gz /var/lib/mysql dbinfo.txt &>/dev/null
+			rm -rf /tmp/dbbak/dbinfo.txt
+		else
+			mkdir /tmp/dbbak
+			echo "Date: $date!" > /tmp/dbbak/dbinfo.txt
+			echo "Data size: $size" >> /tmp/dbbak/dbinfo.txt
+			cd /tmp/dbbak
+			tar -zcf mysql-lib-$date.tar.gz /var/lib/mysql dbinfo.txt &>/dev/null
+			rm -rf /tmp/dbbak/dbinfo.txt
+	fi
+		
+		
+	判断apache是否启动
+	#!/bin/bash
+	#Author: shenchao
+	
+	#使用nmap命令扫描服务器，并截取apache服务的状态，赋予变量port
+	port=$(nmap -sT 192.168.1.156 | grep tcp | grep http | awk '{print $2}')
+	if [ "$port"=="open" ]
+		then 
+			echo "$(date)httpd is ok!" >> /tmp/autostart-acc.log
+		else
+			/etc/rc.d/init.d/httpd start &>/dev/null
+			echo "$(date) restart httpd!!" >> /tmp/autostart-err.log
+	fi 
+	
+	
+多分支if条件语句
+	if [ 条件判断式1 ]
+		then
+			条件1成立时，执行程序1
+	elif
+		then
+			条件2成立时，执行程序2
+	elif
+		then
+			条件3成立时，执行程序3
+	else
+		当所有条件都不成立时，最后执行此程序
+	fi
+	
+	写个脚本，判断用户 的是什么文件
+	#!/bin/bash
+	#Author: shenchao
+
+	#接收键盘的输入并赋予变量file
+	read -p "Please input a filename: " file
+
+	#判断用户是否输入
+	if [ -z "$file" ]
+		then
+			echo "Error,please input a filename"
+			exit 1
+	#判断file的值是否存在
+	elif [ ! -e "$file" ]
+		then
+			echo "Your input is not a file"
+			exit 2
+	#判断file的值是否为普通文件
+	elif [ -f "$file" ]
+		then 
+			echo "$file is a regulare file"
+	#判断file的值是否为目录文件
+	elif [ -d "$file" ]
+		then
+			echo "$file is a directory"
+	else
+		echo "$file is an other file"
+	fi
+			
+	
+	这里需要注意的是 exit 1的功能，首先如果它跳出之后，我们可以通过echo $?获得退出值
+	判断到底是哪里出了错。 其次，如果不用exit进行报错跳出，那么这个程序还会继续执行下去
+	就会出现混乱，不符合程序设计的初衷。
+		
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./86_2.sh 
+		Please input a filename: 
+		Error,please input a filename
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./86_2.sh 
+		Please input a filename: hello.sh
+		hello.sh is a regulare file
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./86_2.sh 
+		Please input a filename: /root
+		/root is a directory
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./86_2.sh 
+		Please input a filename: abc
+		Your input is not a file
+	
+
+

@@ -1,0 +1,46 @@
+
+Shell是什么？
+	Shell是一个命令行解释器，它为用户提供了一个向Linux内核发送请求以便运行程序
+	的界面系统级程序，用户可以用Shell来启动、挂起、停止甚至是编写一些程序。
+	
+	硬件 --> 内核 --> Shell命令解释器 --> 外层应用程序
+	所以Shell的工作就是 将我们敲入的命令，翻译称为0101的机器指令给内核，
+	同时将机器的执行结果，翻译称为我们可以看懂的命令。
+	
+	Shell还是一个功能相当强大的编程语言，易编写，易调试，灵活性较强。
+	Shell是解释执行的脚本语言(不需要编译)，在Shell中可以直接调用Linux系统命令。
+	
+
+Shell的分类:
+	Bourne Shell:从1979年起Unix就开始使用Bourne Shell，它的主文件名为sh。
+	C Shell: C Shell主要在BSD版的Unix系统中使用，其语法和C语言类似而得名。
+	
+	Shell的这两种主要语法类型有Bourne和C，这两种语法彼此不兼容。
+	Bourne家族主要包括sh、ksh、Bash、psh、zsh
+	C家族主要包括csh、tcsh
+	
+	Bash与sh兼容，现在使用的Linux就是使用Bash作为用户的基本Shell
+	
+
+Linux支持的Shell
+	less /etc/shells
+		# /etc/shells: valid login shells
+		/bin/sh
+		/bin/bash
+		/usr/bin/bash
+		/bin/rbash
+		/usr/bin/rbash
+		/bin/dash
+		/usr/bin/dash
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ sh
+	$ exit
+
+	less /etc/passwd	
+		#说明root用户可以使用 /bin/bash 完成所用功能
+		root:x:0:0:root:/root:/bin/bash
+		#说明普通用户 使用的则是/bin/sh 这个Shell
+		tester:x:1001:1001::/home/tester:/bin/sh
+
+
+

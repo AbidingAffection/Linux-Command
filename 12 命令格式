@@ -1,0 +1,57 @@
+
+命令格式：
+	命令 [-选项] [参数]
+	例如 ls -la /ect
+	
+	说明 1)个别命令不遵循此格式
+	     2)当有多个选项的时候可以写在一起 -al等于-l -a
+	     3)-a等于--all 简化选项用- 完整选项用--
+	     
+	     
+目录处理命令ls：
+	英文原意 list
+	命令所在路径 /bin/ls
+	ls -a
+	     在Linux中以.开头的文件都是隐藏文件,例如.bashrc
+	     我们使用-a指令可以很方便的看到这些隐藏文件
+	ls -l 
+	     1.l可以联想到long 表示长格式显示 多出来相关的属性
+	       drwxrwxr-x 24 abidingai abidingai 4096 1月  25 14:06 anaconda3
+	     2.第一个数字24 表示引用计数 只在硬链接中有用
+	     3.abdingai abdingai 则表示所有者 和 所属组
+	       在Linux系统中 每个文件把用户分成了三类 u表示所有者 g表示所属组 o表示other
+	       所有者只能有一个，文件创建者  所属组也只能有一个，组内的人可以使用文件  其他人则不能使用
+	     4.第二数字4096表示的是文件大小，默认单位是字节，可以使用 ls-lh 指令换算成KB MB GB
+	       其中-h指令的意思是 人性化显示，绝大多数统计大小的命令都支持-h选项
+	     5.1月  25 14:06 相当于最后修改时间 
+	ls -d 
+	     1.ls -ld /ect
+		   drwxr-xr-x 134 root root 12288 1月  27 15:28 /etc/
+		   显示当前目录本身的信息，而不显示目录下的信息
+	     2.ls -d /usr/share/man/m*[0-9]
+			/usr/share/man/man1  /usr/share/man/man4  /usr/share/man/man7
+			/usr/share/man/man2  /usr/share/man/man5  /usr/share/man/man8
+			/usr/share/man/man3  /usr/share/man/man6
+			-------------------------------------------------------------
+			查找/usr/share/man 目录下以m开头且以一个数字加x结尾的文件
+			-d 只展开一级目录 /usr/share/man/  目录路径
+			m*[0-9]x  m表示以m开头，[0-9]x表示以数字加x结尾,因为对文件的中间没
+			有加以限制所以用*代替中间部分，*表示任意个数的任意字符
+	ls -i
+	     1.i表示inode 文件系统在查文件的时候 实际上是通过这个编号进行的查询，inode就像身份证号码一样
+			4721450 anaconda3  4718671 Documents  4718673 Pictures  4718669 Templates
+			5116855 Android    4718668 Downloads  4718670 Public    4718674 Videos
+			4718664 Desktop    4718672 Music      4718991 snap
+
+ 
+-rwxr--r--的理解：
+	-:表示文件	r:读
+	l:表示软链接	w:写
+	d:表示目录	x:执行
+	rwx:表示u 所有者的读写和和执行权限
+	r--:表示g 所属组的读权限
+	r--:表示o 其他人的读权限
+
+
+
+

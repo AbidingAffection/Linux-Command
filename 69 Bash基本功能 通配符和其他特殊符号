@@ -1,0 +1,41 @@
+
+通配符
+	?	匹配一个任意字符
+	*	匹配0个或任意多个字符 (所以不要执行rm -rf *)
+	[]	匹配中括号中任意一个字符，例如[abc]代表一定匹配一个字符，或者是a或者是b或者是c
+	[-]	匹配中括号中任意一个字符，-代表一个范围。例如[a-z]代表匹配一个小写字母
+	[^]	逻辑非，代表匹配不是中括号内的一个字符。例如[^0-9]代表匹配一个不是数字的字符
+	
+	 
+Bash中其他特殊符号
+	''	单引号。在单引号中的所有特殊符号，例如 $和`(反引号) 都没有特殊含义
+	"" 	双引号。在双引号中的特殊字符都没有特殊含义，但是 $ ` \是例外，拥有
+		调用变量的值 引用命令 转义符 的特殊含义
+	``	反引号。反引号括起来的内容是系统命令，在Bash中会先执行它。和$()作用一样。
+	$()	和反引号作用一样
+	#	在Shell脚本中，#开头行代表注释
+	$	用于调用变量的值，如需要调用变量name的值时，需要用$name的方式获得变量的值
+	\	转义符
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ bash
+	abidingai@abidingai-W65KJ1-KK1:~$ name=sc
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $name
+	sc
+	abidingai@abidingai-W65KJ1-KK1:~$ echo '$name'
+	$name
+	abidingai@abidingai-W65KJ1-KK1:~$ echo "$name"
+	sc
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ abc=`date`
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $abc
+	2021年 03月 08日 星期一 21:29:21 CST
+
+	abidingai@abidingai-W65KJ1-KK1:~$ echo ls
+	ls
+	abidingai@abidingai-W65KJ1-KK1:~$ echo `ls`
+	anaconda3 Android baidunetdisk baidunetdiskdownload ...
+
+
+
+
+

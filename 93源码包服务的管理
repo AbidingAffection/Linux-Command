@@ -1,0 +1,36 @@
+
+源码包安装服务的启动
+	使用绝对路径，调用启动脚本来启动。不同的源码包启动脚本不同。
+	可以查看源码包的安装说明，查看启动脚本的方法。
+	
+	/usr/local/apache2/bin/apachectl start|stop
+	
+	
+源码包服务的自启动
+	vi /etc/rc.d/rc.local 中加入
+	/usr/local/apache2/bin/apachectl start
+
+
+让源码包服务被服务管理命令识别
+	让源码包的apache服务能被service命令管理启动(只需要做一个软链接)
+	ln -s /usr/local/apache2/bin/apachectl /etc/init.d/apache
+	
+	然后service apache start|stop 就可以启动和关闭了
+	
+
+让源码包的apache服务能被chkconfig与ntsysv命令管理自启动
+	vi /etc/init.d/apache
+	加入
+		#chkconfig: 35 86 76
+		#description: source package apache
+		
+		(指定httpd脚本可以被chkconfig命令管理，这两句不是单纯的注释)
+		(格式是: chkconfig: 运行级别 启动顺序 关闭顺序)
+		
+	那如何确定启动和关闭顺序呢?
+		vi etc/rc.d/ 可以看见 rc0.d/  rc1.d/  rc2.d/ ... rc5.d/
+		这里是3和5级别，比如我们进入3这个启动级别，然后就可看见
+		k+数字+服务: 表示该服务的关闭顺序
+		s+数字+服务: 表示该服务的启动顺序
+		
+		

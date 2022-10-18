@@ -1,0 +1,80 @@
+
+标准输入输出
+	设备	设备文件名	文件描述符	类型
+	键盘	/dev/stdin	0		标准输入
+	显示器	/dev/stdout	1		标准输出
+	显示器	/dev/sdeerr	2		标准错误输出
+	
+			
+输出重定向
+	类型			符号			作用			
+				命令>文件	以覆盖的方式，把命令的正确输出输出到指定的文件或设备中
+	标准输出重定向
+				命令>>文件  	以追加的方式，把命令的正确输出输出到指定的文件或设备中
+	
+				错误命令 2>文件	以覆盖的方式，把命令的错误输出输出到指定的文件或设备中
+	标准错误输出重定向	(注意 2>或者 2>> 是不能有空格的)
+				错误命令 2>>文件 以追加的方式，把命令的错误输出输出到指定的文件或设备中
+				
+	abidingai@abidingai-W65KJ1-KK1:~$ ls >abc
+	abidingai@abidingai-W65KJ1-KK1:~$ cat abc
+		abc
+		anaconda3
+		Android
+		...
+		snap
+		Templates
+		Videos
+	abidingai@abidingai-W65KJ1-KK1:~$ date > abc
+	abidingai@abidingai-W65KJ1-KK1:~$ cat abc
+		2021年 03月 08日 星期一 19:22:21 CST
+	abidingai@abidingai-W65KJ1-KK1:~$ date >> abc
+	abidingai@abidingai-W65KJ1-KK1:~$ cat abc
+		2021年 03月 08日 星期一 19:22:21 CST
+			2021年 03月 08日 星期一 19:23:28 CST
+	abidingai@abidingai-W65KJ1-KK1:~$ lst 2>>abc
+	abidingai@abidingai-W65KJ1-KK1:~$ cat abc
+		2021年 03月 08日 星期一 19:22:21 CST
+		2021年 03月 08日 星期一 19:23:28 CST
+		Command 'lst' not found, but there are 20 similar ones.
+
+	因为正确输出和错误输出的保存格式不相同，但是如果我们可以提前知道是错误命令，我们不写错就好了。
+	所以在实际的工作常见中，最上面这两种方式用的不多，我们需要的是同时保存正确和错误输出的方式。
+	
+	正确输出和错误输出	命令>文件 2>&1		覆盖，把正确和错误输出都保存到同一个文件中
+	同时保存 		命令&>文件	
+				
+				命令>>文件 2>&1	追加，把正确和错误输出都保存到同一个文件中
+				命令&>>文件
+				
+				命令>>文件1 2>>文件2    把正确输出追加到文件1中，错误输出追加到文件2中
+	
+	命令>文件 2>&1的意思是 先把错误输入重定向到正确输入，然后再覆盖保存到文件中。
+	
+	ls &>/dev/null 
+		#/dev/null相当于是一个垃圾箱，那么这样的意思就是 系统只需要执行指令而不用保存执行结果
+		#将无用的输入丢弃，使得Shell脚本的执行更加自动化
+		
+	
+输入重定向
+	输入重定向远没有输出重定向使用的那么广泛和频繁，所以这里只做简单的演示
+	演示命令: wc [选项] [文件名]
+		      -c    统计字节数
+		      -w    统计单词数
+		      -l    统计行数
+
+	abidingai@abidingai-W65KJ1-KK1:~$ wc
+		shenchao is the
+		honest man in
+		lampbrother
+		      3       7      42
+		输入完之后按ctrl+D，其中3表示3个回车符，7表示7个单词，42表示42个字符(包括回车换行)
+	
+	命令 < 文件 ：把文件作为命令的输入，即输入重定向
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ wc <abc
+ 		5  22 144
+
+		
+
+	

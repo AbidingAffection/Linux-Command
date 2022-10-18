@@ -1,0 +1,121 @@
+
+awk '条件1{动作1} 条件2{动作2} ...' 文件名
+	条件: 一般使用关系表达式作为条件
+		x>10	判断变量x是否大于10
+		x>=10	大于等于
+		x<=10	小于等于
+	
+	动作:
+		格式化输出
+		流程控制语句
+		
+	****************************************************************************************
+	因为单引号已经被awk命令所占用，所以如果想进行格式调整，使用双引号"\t"
+	abidingai@abidingai-W65KJ1-KK1:$ awk '{printf $2"\t" $4"\n"}' student
+		Name	Mark
+		Liming	86
+		Sc		90
+		Gao		83
+	所以awk命令是一行一行的读入数据，然后赋值给变量例如$2 $4然后，然后判断条件
+	如果条件满足则执行，否则不执行。此处没有条件，所以表示都执行。
+	
+	****************************************************************************************
+	在Linux系统中是没有print函数的，但是awk中有print，它们之前的区别在于print自动加换行
+	abidingai@abidingai-W65KJ1-KK1:~$ df -h | awk '{print $1 "\t" $2"\t" $3}'
+		Filesystem	Size	Used
+		udev		3.9G	0
+		tmpfs		786M	2.0M
+		/dev/sda2	109G	40G
+		/dev/loop3	100M	100M
+		/dev/loop7	256M	256M
+		/dev/loop1	156M	156M
+
+	假设我们现在要实现一个功能，检查自己根分区的挂载(也就是内存使用量)，如果超过80%则关闭某些功能
+	那么首先找到自己的根分区，使用指令grep sda2
+	abidingai@abidingai-W65KJ1-KK1:~$ df -h | grep sda2
+	/dev/sda2       109G   40G   64G  39% /
+
+	然后打印出第5列的CPU占用部分
+	abidingai@abidingai-W65KJ1-KK1:~$ df -h | grep sda2 | awk '{print $5}'
+	39%
+	
+	然后截取出数字部分
+	abidingai@abidingai-W65KJ1-KK1:~$ df -h | grep sda2 | awk '{print $5}' | cut -d "%" -f 1
+	39
+	
+	接下来将这个结果赋值给某个变量，然后使用流程控制的方式，完成剩下的功能。
+	
+	****************************************************************************************
+	使用BEGIN在正式读取文件前，进行操作
+	abidingai@abidingai-W65KJ1-KK1:$ awk 'BEGIN{print "This is a test"} {print $2"\t" $3}' student
+		This is a test
+		Name	gender
+		Liming	M
+		Sc	M
+		Gao	M
+		
+	使用FS指定分隔符(但是此时第一行没有处理,因为awk读入数据是先读入第一行，然后在判断和执行{} )
+	abidingai@abidingai-W65KJ1-KK1:~$ awk '{FS=":"}{print $1 "\t" $3}' /etc/passwd
+		root:x:0:0:root:/root:/bin/bash	
+		daemon	1
+		bin		2
+		sys		3
+		sync	4
+		games	5
+		man		6
+		lp		7
+		mail	8
+		news	9
+
+	使用BEGIN+FS指定分隔符并处理第一行
+	abidingai@abidingai-W65KJ1-KK1:~$ awk 'BEGIN{FS=":"}{print $1 "\t" $3}' /etc/passwd
+		root	0
+		daemon	1
+		bin	2
+		sys	3
+		sync	4
+		games	5
+		man	6
+		
+	比如提取所有可以登录的用户的用户名和序号
+	abidingai@abidingai-W65KJ1-KK1:~$ cat /etc/passwd|grep "/bin/bash"|awk 'BEGIN{FS=":"}{print $1 "\t" $3}'
+	root	0
+	abidingai	1000
+
+	使用End在所有的数据都处理完之后再执行语句
+	abidingai@abidingai-W65KJ1-KK1:$ awk 'END{print "This is the end"} {print $2"\t" $3}' student
+		Name	gender
+		Liming	M
+		Sc		M
+		Gao		M
+		This is the end
+
+	****************************************************************************************
+	awk之所以功能强大，因为它不仅仅可以支持多个空格的划分，还可以支持关系运算符
+	abidingai@abidingai-W65KJ1-KK1:$ cat student|grep -v Name|awk '$4>85 {print $2}'
+		Liming
+		Sc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

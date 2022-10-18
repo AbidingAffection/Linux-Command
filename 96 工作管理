@@ -1,0 +1,46 @@
+
+1、把进程放入后台
+	#第一种是在你的命令最后 加上一个&
+	 (通过这种方式放入后台的命令还会继续执行)
+	tar -zcf etc.tar.gz /etc &
+	
+	#第二种是在命令的执行过程中 按下ctrl+z
+	 (通过这种方式放入后台的命令被暂停)
+	 
+ 
+2、查看后台的工作
+	jobs [选项]
+		 -l: 显示工作的PID
+	
+	#连续使用三个top命令 并把它们都放入后台 再使用jobs命令查看
+	abidingai@abidingai-W65KJ1-KK1:~$ jobs -l
+		[1]   7969 Stopped (signal)        top
+		[2]-  8051 Stopped (signal)        top
+		[3]+  8052 Stopped (signal)        top
+
+		 +号代表最近一个放入后台的工作，也是工作恢复时，默认恢复的工作
+		 -号代表倒数第二个放入后台的工作
+		 [1]代表的是工作号，第三个及以后放入的后台的工作就不再有工作号了
+
+
+3、把后台暂停的工作恢复到前台执行
+	fg %工作号
+		需要注意的是，%可以省略但是要注意，但是要注意工作号和PID的区别
+
+	abidingai@abidingai-W65KJ1-KK1:~$ jobs -l
+		[1]-  7969 Stopped (signal)        top
+		[2]+  8051 Stopped (signal)        top
+	#注意这里我敲完fg并回车后，这里的命令自动替换称为了top，所以看不见fg命令
+	abidingai@abidingai-W65KJ1-KK1:~$ top
+	abidingai@abidingai-W65KJ1-KK1:~$ jobs
+		[1]+  Stopped                 top
+
+
+4、把后台暂停的工作恢复到后台执行
+	bg %工作号
+		需要注意的是，后台恢复执行的命令不能和前台有交互，否则不能恢复到后台执行
+		比如top vi 命令就不可以恢复到后台执行，依然状态为stop，因为top命令必须和前台有交互
+
+
+
+

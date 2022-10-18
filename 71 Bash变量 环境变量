@@ -1,0 +1,119 @@
+
+环境变量是什么？
+	用户自定义的变量只在当前的Shell中生效(当前终端)
+	环境变量会在当前Shell和这个Shell的所有子Shell中生效。(当前终端和子终端)
+	把环境变量写入相应的配置文件，这个环境变量就会在所有的Shell中生效。
+	(不仅包括当前终端，还包括以后所有新建的终端)
+	
+	
+设置环境变量
+	#声明环境变量
+	export 变量名 = 变量值
+	
+	#查询环境变量
+	env
+	
+	#删除变量
+	unset 变量名
+
+
+查看进程树 pstree
+	abidingai@abidingai-W65KJ1-KK1:~$ bash
+	abidingai@abidingai-W65KJ1-KK1:~$ pstree | grep bash
+		|         |-gnome-terminal--+-bash---bash-+-grep
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ exit
+	exit
+	abidingai@abidingai-W65KJ1-KK1:~$ pstree | grep bash
+        |         |-gnome-terminal--+-bash-+-grep
+
+	从这里便可以很清楚的看到，当我们输入bash之后，我们便创建了一个子Shell
+
+
+实验
+	定义局部变量name和age，由上一讲的知识，它们在set中应该可以查到	
+	此时使用查询环境变量指令env 发现只有gender=male
+	abidingai@abidingai-W65KJ1-KK1:~$ name="shenchao"
+	abidingai@abidingai-W65KJ1-KK1:~$ age=18
+	abidingai@abidingai-W65KJ1-KK1:~$ export gender=male
+	abidingai@abidingai-W65KJ1-KK1:~$ env
+	gender=male
+
+	创建一个子bash，然后使用set查询，发现只能查到gender=male
+	这说明，局部变量只能在当前Shell中使用，而环境变量还可以在子Shell中使用
+	abidingai@abidingai-W65KJ1-KK1:~$ bash
+	abidingai@abidingai-W65KJ1-KK1:~$ set | grep gender
+	gender=male
+	abidingai@abidingai-W65KJ1-KK1:~$ set | grep name
+	返回值为空
+	abidingai@abidingai-W65KJ1-KK1:~$ set | grep age
+	返回值为空
+	
+	如果我们将export gender=male写入配置文件，那么即使我们关闭这个终端
+	然后再重新打开这个终端，这个环境变量依然生效，或者说，对所有的Shell生效
+	
+	
+系统常见环境变量
+	PATH:系统查找命令的路径
+	abidingai@abidingai-W65KJ1-KK1:~$ env | grep PATH
+	PATH=/home/abidingai/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/	
+	     usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+	
+	我们敲入的指令，例如ls等指令，就可以直接运行。而我们知道，ls实际是一个
+	可执行文件，正常来说是需要 通过./sbin/bin/ls 然后才能运行的，所以系统
+	实际上是在PATH中 根据:分割的路径，一个一个找，直到在/sbin/bin下找到了
+	ls的可执行文件，然后才执行。
+	
+	所以，假设我们写了一个hello.sh的脚本，赋予它执行的权限，然后将其拷贝到
+	PATH路径中的任意一个下，那么我们甚至可以通过Tab键直接补全，然后运行
+	
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ su root
+	root@abidingai-W65KJ1-KK1:/home/abidingai/Desktop/txt/Linux Command/sh# cp hello.sh /bin
+	root@abidingai-W65KJ1-KK1:/home/abidingai/Desktop/txt/Linux Command/sh# hello.sh 
+	Mr.shen is the most honest man in Lampbrother!
+
+	但是这种方式并不合理，也不常用，我们通常采用的方式是将现在hello.sh文件的路径加入环境变量
+	同样也可以达到上述的效果，
+	
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ chmod 755 Tetris.sh 
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $PATH
+		/home/abidingai/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:
+		/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+	abidingai@abidingai-W65KJ1-KK1:~$ PATH="$PATH":/home/abidingai/Desktop/txt/"Linux Command"/sh
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $PATH
+		/home/abidingai/anaconda3/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:
+		/usr/games:/usr/local/games:/snap/bin:/home/abidingai/Desktop/txt/Linux Command/sh
+	abidingai@abidingai-W65KJ1-KK1:~$ hello.sh 
+	Mr.shen is the most honest man in Lampbrother!
+
+	
+	PS1:定义系统提示符的变量
+	\d: 显示日期，格式为"星期 月 日"
+	\h: 显示简写主机名。如默认主机名"localhost"
+	\t: 显示24小时制时间，格式为"HH:MM:SS"
+	\T: 显示12小时制时间，格式为"HH:MM:SS"
+	\A: 显示24小时制时间，格式为"HH:MM"
+	\u: 显示当前用户名
+	\w: 显示当前所在目录的完整名称
+	\W: 显示当前所在目录的最后一个目录
+	\#: 执行的第几个命令
+	\$:提示符。如果是rott用户会显示提示符为#,普通用户则显示为$
+	
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ set | grep PS1
+	PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\		
+	[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+	abidingai@abidingai-W65KJ1-KK1:~$ PS1='[\u@\h \W]\$ '
+	
+	#使用\w之后，会显示完整的目录
+	[abidingai@abidingai-W65KJ1-KK1 ~]$ PS1='[\u@\t \w]\$ '
+	[abidingai@12:45:07 ~]$ cd /usr/local/src/
+	
+	#使用了\#之后，会显示当前的命令是第几个命令
+	[abidingai@12:45:37 /usr/local/src]$ PS1='[\u@\t \# \w]\$ '
+	[abidingai@12:46:03 5 /usr/local/src]$ 
+
+	
+		
+

@@ -1,0 +1,39 @@
+
+
+1、区别
+	安装之前的区别：概念上的区别
+	安装之后的区别：安装位置不同
+
+
+2、RPM包安装位置(默认安装路径)
+	/etc/		配置文件安装目录
+	/usr/bin	可执行命令安装目录
+	/usr/lib	程序所使用的函数库保存位置
+	/usr/share/doc	界别的软件使用手册保存位置
+	/usr/share/man  帮助文件保存位置
+	
+
+3、源码包安装位置
+	安装在指定位置当中，一般是 /usr/local/软件名
+	(类似于Windows中的c盘下的programs)
+	
+
+4.安装位置不同带来的影响
+	RPM包安装的服务可以使用系统服务管理命令(service)来管理，
+	例如RPM包安装的apache的启动方式是：(当然也可以使用环境变量简化启动过程)
+	/etc/rc.d/init.d/httpd start
+	service httpd start 
+	RedHat系列为了简化/etc/rc.d/init.d/httpd start 这种启动方式，提供了service命令
+	也就是说service命令会自动的在/etc/rc.d/init.d下去寻找http命令，也就是2中的默认位置
+	所以service命令只能管理rpm包而不能管理源码包
+	
+	如果是用源码包安装的httpd服务，只能用绝对路径进行服务的管理，如
+	/usr/local/apache2/bin/apachectl start
+
+
+
+
+
+
+
+

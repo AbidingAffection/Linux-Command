@@ -1,0 +1,43 @@
+
+文件处理命令chmod：
+	功能描述：改变文件或者目录权限
+	英文原意：change the permissions mode of a file
+	所在路径： /bin/chmod
+	语法说明：chmod [{ugoa}]{+-=}{rwx}][文件或目录]
+			[mode=421][文件或目录]
+			-R 递归修改
+	
+	chmod u+x /tmp/Japanlovestory.list
+	      在tmp目录下创建了空文件 Japanlovestory.list
+	      -rw-rw-r-- 1 abidingai abidingai 0 1月  30 19:46 Japanlovestory.list 改变为
+	      -rwxrw-r-- 1 abidingai abidingai 0 1月  30 19:46 /tmp/Japanlovestory.list*
+	     
+	chmod g+x,o-r /tmp/Japanlovestory.list
+	      使用逗号同时做多个授权，所属组权限减掉，改变为
+	      -rwxrwx--- 1 abidingai abidingai 0 1月  30 19:46 /tmp/Japanlovestory.list*
+
+	chmod g=wx /tmp/Japanlovestory.list
+	      不管所属组之前是怎样的权限，现在将权限改为 -wx
+
+	chmod 764 /tmp/Japanlovestory.list
+	      将权限修改为 rwxrw-r--，因为 r对应4 w对应2 x对应1，结果为
+	      -rwxrw-r-- 1 abidingai abidingai 0 1月  30 19:46 /tmp/Japanlovestory.list*
+
+	chmod -R 777 testdir
+	      修改目录testfile及其目录下文件为所有用户具有全部权限
+ 
+ 
+ 对rwx权限的正确理解：
+ 		文件			目录
+ 	
+ 	r	可以查看文件内容	列出目录中的内容
+ 				
+ 	w	可以修改文件内容	可以在目录中创建、删除文件
+ 	
+ 	x	可以执行文件		可以进入目录
+ 	
+ 	所以，是不是可以删除一个文件，不是取决于对它是不是有w权限，
+ 	而是看你对该文件所在的目录是不是具有w的权限，所以对一个目录而言，rx权限是同时出现的。
+
+
+

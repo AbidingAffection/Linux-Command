@@ -1,0 +1,47 @@
+
+while循环和until循环
+	while [ 条件判断式 ]
+		do 
+			程序
+		done
+	
+	从1加到100的脚本
+	#!/bin/bash
+	#Author: shenchao
+	
+	i=0;
+	s=0;
+	#如果变量i的值小于100，则执行循环
+	while [ $i -le 100 ]
+		do
+			s=$(( $s+$i ))
+			i=$(( $i+1 ))
+		done
+	echo "The sum is: $s"
+	
+	运行结果
+	abidingai@abidingai-W65KJ1-KK1:~/Desktop/txt/Linux Command/sh$ ./89_1.sh 
+		The sum is: 5050
+
+
+until循环
+	until循环和while循环相反,until循环时只要条件判断式不成立则进行循环，并执行循环程序。
+	一旦循环条件成立，则终止循环。
+	
+	从1加到100的脚本
+	#!/bin/bash
+	#Author: shenchao
+	
+	i=0;
+	s=0;
+	#如果变量i的值大于100，循环才停止
+	while [ $i -gt 100 ]
+		do
+			s=$(( $s+$i ))
+			i=$(( $i+1 ))
+		done
+	echo "The sum is: $s"
+	
+	
+
+

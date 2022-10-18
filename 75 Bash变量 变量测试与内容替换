@@ -1,0 +1,26 @@
+
+变量测试与内容替换
+	变量置换方式		变量y不存在		变量y为空值		变量y有值
+	x=${y-新值}		x=新值			x为空			x=$y
+	
+	变量测试与置换方式一共有8种，这里只列出最简单的一种。
+	简单理解就是 我们要通过 x的返回值 去判断 y的值，${y-新值}表示二选一
+	那么如果y不存在，所以x就只能选新值，此时x=新值
+	如果y存在，那么x=y的值(不管y为空还是y有值)
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ unset y
+	abidingai@abidingai-W65KJ1-KK1:~$ x=${y-new}
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $x
+	new
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ y=""
+	abidingai@abidingai-W65KJ1-KK1:~$ x=${y-new}
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $x
+
+	abidingai@abidingai-W65KJ1-KK1:~$ y=old
+	abidingai@abidingai-W65KJ1-KK1:~$ x=${y-new}
+	abidingai@abidingai-W65KJ1-KK1:~$ echo $x
+	old
+
+
+

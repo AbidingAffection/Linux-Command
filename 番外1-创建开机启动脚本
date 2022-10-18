@@ -1,0 +1,46 @@
+
+创建开机自启动脚本
+	1、sudo chmod 777 /lib/systemd/system/rc-local.service
+	
+	2、gedit /lib/systemd/system/rc-local.service
+	   可以看到如下内容：
+	   [Unit]
+			Description=/etc/rc.local Compatibility
+			Documentation=man:systemd-rc-local-generator(8)
+			ConditionFileIsExecutable=/etc/rc.local
+			After=network.target
+			
+	3、在最后添加下列几行
+		[Install]
+		WantedBy=multi-user.target  
+		Alias=rc-local.service
+	
+	4、创建 rc.local文件，内容如下
+		#!/bin/sh
+		echo "看到这行字，说明添加自启动脚本成功。" > /usr/local/test.log
+		#中间这一段写脚本
+		modprobe -r psmouse
+		exit 0
+	
+	5、移动到/etc目录下
+		mv rc.local /etc
+	
+	5、修改rc.local文件权限
+		sudo chmod +x /etc/rc.local
+	
+	6、在/etc/systemd/system 目录下创建软链接
+		sudo ln -s /lib/systemd/system/rc.local.service /etc/systemd/system/ 
+	   (因为 systemd 默认读取 /etc/systemd/system 下的配置文件)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+

@@ -1,0 +1,43 @@
+
+
+格式化输出命令printf
+	本来它应该和echo命令放在一起，因为都是输出命令。但这里主要是为了awk命令做准备工作。
+	
+	输出类型:
+	   %ns		输出字符串，n是数字代指输出几个字符串
+	   %ni		输出整数，n是数字代指输出几个数字
+	   %m.nf	输出浮点数，m和n是数字代指输出的数字的总数和小数的位数
+	   		比如 %8.2代表总共输出8位数，其中2位是小数，6位是整数
+	   		
+	输出格式:
+	   \a		输出警告声音
+	   \b		输出退格键，也就是Backspace键
+	   \f		清楚屏幕
+	   \n		换行
+	   \r		回车，也就是Enter键
+	   \t		水平输出退格键，也就是Tab键
+	   \v		垂直输出退格键，也就是Tab键
+	   
+	abidingai@abidingai-W65KJ1-KK1:~$ printf %s 1 2 3 4 5 6
+	123456
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ printf %s %s %s 1 2 3 4 5 6
+	%s%s123456
+	#这里是只有第一个%s 被当成了输出格式，其余的都当成了普通输出的内容
+	
+	abidingai@abidingai-W65KJ1-KK1:~$ printf '%s %s %s' 1 2 3 4 5 6
+	1 2 34 5 6
+	#这里'%s %s %s' 表以空格作为区分输出三个字符串，所以是1 2 34 5 6
+	
+	abidingai@abidingai-W65KJ1-KK1:$ printf '%s' $(cat student)
+	IDNamegenderMark1LimingM862ScM903GaoM83
+	#printf 不能直接输出文件的内容，也不能通过管道符接收前面一条命令的结果，只能这么使用
+
+	abidingai@abidingai-W65KJ1-KK1:~$ printf '%s\t %s\t %s\t %s\n' $(cat student)
+	ID	 Name	 gender  Mark	
+	1	 Liming  M	 86	
+	2	 Sc	 M	 90	
+	3	 Gao	 M	 83
+
+
+

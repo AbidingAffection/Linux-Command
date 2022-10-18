@@ -1,0 +1,82 @@
+
+帮助命令 man：
+	功能描述： 获得帮助信息
+	英文原意： manual 
+	所在路径： /usr/bin/man 
+	语法说明： man 命令或配置文件	 
+	 
+	man ls
+	      查看ls命令的帮助信息，按q可以退出，它实际上是调用了类似more less命令进行浏览
+	      通过输入 / -l 就可以快速定位到包括 -l的内容的位置信息，可以按n 表示查找下一个
+	      --author
+                with -l, print the author of each file
+              -b, --escape
+                print C-style escapes for nongraphic characters
+              --block-size=SIZE
+                with  -l,  scale  sizes  by  SIZE  when  printing  them;   e.g.,
+                '--block-size=M'; see SIZE format below
+                
+	man services
+	      查看配置文件services的帮助信息，主要是看name行和配置文件的格式。
+	
+	man passwd
+	      这里优先查看的是 命令passwd，通过whereis 我们可以发现，其实有两个passwd
+	      /usr/bin/passwd 我们会发现有个命令叫作passwd 它其实是man命令查看的内容
+	      /etc/passwd 有个配置文件也叫作passwd whereis还能查到配置文件所在路径
+	      通过whereis passwd 得到如下的内容，其中man1通常是命令的帮助 man5是配置文件的帮助
+	      passwd: /usr/bin/passwd /etc/passwd /usr/share/man/man5/passwd.5.gz 
+	      /usr/share/man/man1/passwd.1.gz /usr/share/man/man1/passwd.1ssl.gz
+
+	man 5 passwd
+	      既然前面提到man5才是配置文件的帮助，所以这里声明一下，查看的是配置文件的帮助即可
+	   
+	   
+帮助命令 whatis：
+	功能描述：获得简要的 命令帮助信息
+	所在路径： /usr/bin/whatis
+	 
+	whatis ls
+	    得到的结果如下：
+	    ls (1)               - list directory contents
+
+	      
+帮助命令 apropos：
+	功能描述：获得简要的 配置文件帮助信息(相当于使用man -k xxx)
+	英文原意：apropos 关于，至于
+	所在路径： /usr/bin/whatis
+	 
+	apropos services
+	    得到的结果如下： 说明servers是关于网络的配置信息
+	    ...
+	    service (8)          - run a System V init script
+	    services (5)         - Internet network services list
+	    setservent (3)       - get service entry
+	    ...
+	      
+	      
+帮助选项 --help
+	功能描述：作为命令的的附加选项，显示命令的 options
+      
+	touch --help
+	   得到的结果如下：
+	   Mandatory arguments to long options are mandatory for short options too.
+	  -a                     change only the access time
+	  -c, --no-create        do not create any files
+	  -d, --date=STRING      parse STRING and use it instead of current time
+	  -f                     (ignored)
+	      
+
+帮助命令 help     
+	功能描述：查看Shell内置命令的帮助信息
+	Q:什么是Shell
+	A:命令解释器，我们使用的命令中，有部分命令是解释器内置的
+	  另外Linux中有好几个命令解释器，比如bash
+	  	
+	Q:如何判断一个命令是不是内置的(build-in)
+	A:内置的命令是找不到路径的,也就是利用which whereis找不到返回结果
+	
+	help umask
+	   对于这样的Shell命令，不能使用man来查看，只能使用help来查看
+
+
+      

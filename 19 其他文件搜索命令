@@ -1,0 +1,79 @@
+
+文件搜索命令 locate：
+	功能描述：建立并更新文件资料库，在其中查找文件
+	所在路径： /usr/bin/locate
+	语法说明： locate 文件名
+		  
+			
+	locate abcd
+	      搜索文件或目录名为abcd的位置，靠的是它建立和维护的db数据库文件
+	      可以发现它的速度非常快，和Windows中的工具Everything一样
+	
+	locate -i abcd
+	       -i指令表示不区分大小写，和find -iname 效果类似
+	      
+	locate locate
+	      在Ubuntu系统下并为默认安装locate命令，需要执行语句sudo apt install mlocate
+	      安装完成后，我们运行locate locate可以知道，它安装在/var/lib/mlocate/mlocate.db下
+	      这样的问题是，如果是新创建的文件，locate的mlocate.db并未及时更新，所以会出现找不到的情况
+	      使用updatedb命令，可以手动的更新这个资料库(不包括/tmp目录)，然后就能找到新创建的文件位置
+
+	 
+
+文件搜索命令 which：
+	功能描述：搜索命令所在目录及别名信息
+	所在路径： /usr/bin/which
+	语法说明： which 命令
+		  
+			
+	which ls
+	      搜索得到ls 命令所在的位置，因为我们知道 /bin /usr/bin下的命令一般是所有用户都能使用
+	      而/sbin /usr/sbin下的命令一般是root才能用的，所以这是which命令的主要用途
+	      which ls 得到的结果是/usr/bin/ls 
+	
+	which useradd
+	      得到的结果是/usr/sbin/useradd 说明这个是只有root才能使用的
+	      
+	which cp
+	which rm
+	      在centos系统中，我们可以不仅可以得到cp rm这些命令的所在位置，还能得到这些命令的别名
+	      例如rm的别名是rm -i 其中-i表示询问确认是否删除，也就是说，如果直接用/usr/bin/rm xxx进行删除
+	      那么是不会有询问的，但是如果用rm xxx进行删除，实际执行的是rm -i xxx，所以会有一次询问
+	 
+	 
+	 
+文件搜索命令 whereis：
+	功能描述：搜索命令所在目录及帮助信息位置 
+	所在路径： /usr/bin/whereis
+	语法说明： whereis 命令	 
+	 
+	 whereis ls
+	      搜索得到ls 命令所在位置，和帮助文档所在位置，得到的结果如下：
+	      ls: /usr/bin/ls /usr/share/man/man1/ls.1.gz
+
+	  
+文件搜索命令 grep：
+	功能描述：在文件中搜寻字串匹配的行并输出
+	所在路径： /bin/grep
+	语法说明： grep -iv [指定字串][文件] 
+	          -i 不区分大小写
+	          -v 排除指定字串
+	 
+	 grep mysql /root/install.log
+	      搜索得到mysql 字符所在的行grep(缩写来自Globally search a Regular Expression and Print)
+	      是一种强大的文本搜索工具，它能使用特定模式匹配（包括正则表达式）搜索文本，并默认输出匹配行
+	      
+	 abidingai@abidingai-W65KJ1-KK1:~$ dpkg -l | grep firefox
+		在Ubuntu下想查看你到底安装了哪些软件的话，用dpkg -l更合适一点
+		ii  firefox                                    99.0+build2-0ubuntu0.20.04.2          amd64        Safe and easy web browser from Mozilla
+		ii  firefox-locale-en                          99.0+build2-0ubuntu0.20.04.2          amd64        English language pack for Firefox
+		ii  firefox-locale-zh-hans                     99.0+build2-0ubuntu0.20.04.2          amd64        Simplified Chinese language pack for Firefox
+		abidingai@abidingai-W65KJ1-KK1:~$ dpkg -l | grep meeting
+	 
+	 grep -v ^# /etc/inittab
+	      在Linux中很多的信息都是包含注释的，通常是行首进行注释，^表示行首
+	      这个时候，就可以使用上述的指令，将这些注释信息去掉，那么看到的信息都是有用的信息	 
+	      
+	      
+	      
+

@@ -1,0 +1,125 @@
+
+压缩解压缩命令 gzip gunzip：
+	功能描述：压缩解压缩 .gz格式的文件
+	英文原意：GNUzip 
+	所在路径： /bin/gzip gunzip	 
+	压缩格式： .gz
+	 
+	gzip boduo
+		压缩文件boduo，压缩文件的大小大约是源文件的1/5
+		gzip只能压缩文件 不能压缩目录 这是和Windows很不一样的地方，WinRAR想压缩啥压缩啥
+		另外gzip是不保留源文件的，相当于WinRAR中的压缩并删除
+	
+	gzip -k boduo
+		压缩文件，但保留源文件
+	
+	gunzip doduo.zp
+		解压boduo 
+	      
+
+	      
+补充说明
+    绝大多数的病毒都很难感染压缩文件。
+
+    GNU:       
+       Unix 系统被发明之后，大家用的很爽。但是后来开始收费和商业闭源了。
+       一个叫 RMS 的大叔觉得很不爽，于是发起 GNU 计划，打算模仿Unix从头做一个开源的版本。
+       然后他自己做了编辑器 Emacs 和编译器 GCC，然后大家在GNU下做了很多的工作和项目。
+       但是GNU缺少操作系统内核，原定的内核HURD一直没有完成，然后Linus同学为了在PC上运行Unix
+       在Minix的启发下开发了Linux系统内核，系统启动后还是用的gcc和bash等软件，并选择了GPL
+       (GPL是GNU运动制定的开源软件计划)，因此符合GNU运动的宗旨，并且正好是GNU计划所欠缺分部分
+       因此最后它们联合打包发布，叫作GNU/Linux 然后随着时间的推移，大家省略了前面的部分成了Linux系统
+   
+   
+    zip:
+       zip是最古老的压缩格式，所以在Linux中和Windows中都可以正常使用
+       rar是适用Windows的压缩格式，在Linux中只需要使用rarforlinux也可解压缩使用
+       	         
+	      
+压缩解压缩命令 tar：
+	功能描述：打包目录 
+	所在路径： /bin/tar	 
+	压缩格式： .tar.gz
+	语法说明： tar 选项[-zcf][压缩后文件名][目录]
+	          -v 显示详细信息
+	          -f 指定文件名
+	          
+	          -c 打包          (压缩必须cf)
+	          -z 打包同时按照gz格式压缩  
+	          -j 打包同时按照bz2格式压缩
+	          
+	          -x 解包          (解压必须xf)
+	          -z 按照gz格式解压缩
+	          -j 按照bz2格式解压缩
+	 
+       tar -vcf xiaojiejie.tar xiaojie 
+	      压缩目录xiaojie 为 xiaojiejie.tar，得到的结果如下：
+	        xiaojie/
+			xiaojie/longze/
+			xiaojie/cangjing/
+			xiaojie/boduo/
+      
+       gzip xiaojiejie.tar
+	      这时再使用gzip 命令我们就可以获得 一个名为 xiaojiejie.tar.gz文件
+	      也就是说，压缩目录要分为两步，第一步是 打包目录，第二步压缩压缩 打包后的目录
+	      又因为gizp是压缩后删除，所以之前打包的目录文件会消失，好像就一步压缩完成的
+	      这也是我们互联网上最常见的互联网的安装文件包
+       
+       tar -zcf Japan.tar.gz xiaojie
+              我们可以看到cf是必须添加的选项，至于v和z是可选项；我们也可以看到在上述的过程中
+              我们先打包再压缩很麻烦，所以使用 -z 选项，我们就可以两步并做一步
+              
+       tar -zcf etc.tar.gz /etc 
+              假设我们要将etc目录备份，我们就可以使用上述的指令      
+	      
+       tar -xf xiaojiejie.tar.gz 
+              好像我们解压的时候，其实只需要-xf指令即可
+	      
+	      
+压缩解压缩命令 zip：
+	功能描述：压缩文件或目录
+	所在路径： /usr/bin/zip	 
+	压缩格式： .zip
+	语法说明：zip 选项[-r][压缩后文件名][文件或目录]
+		  -r 表示压缩目录
+		  zip压缩方式可以保留原文件
+		  
+  	zip -r xiaojie.zip xiaojie 
+  	       通过加上-r的选项，我们就可以压缩目录，还会非常人性化的给出压缩比
+  	       我们也可以看到zip作为一种非常古老的压缩格式，其压缩比并不是非常客观，所以用的不多
+       	adding: xiaojie/ (stored 0%)
+		adding: xiaojie/longze/ (stored 0%)
+		adding: xiaojie/cangjing/ (stored 0%)
+		adding: xiaojie/boduo/ (stored 0%)
+		adding: xiaojie/boduo/19 其他文件搜索命令 (deflated 52%)
+		adding: xiaojie/boduo/20 帮助命令 (deflated 53%)
+
+ 	unzip xiaojie.zip
+ 	       解压缩的时候，直接使用unzip即可，不区分是文件还是目录，会提示是否替换原文件
+ 	   
+ 	       
+压缩解压缩命令 bzip2：
+	功能描述：压缩文件 相当于zip的升级版 压缩比惊人
+	所在路径： /usr/bin/bzip2
+	压缩格式： .bz2
+	语法说明：bzip2 选项[-k][文件]
+		  -k 产生压缩文件后保留原文件
+		  只能压缩文件，如果不带-k会删除原文件
+		  
+		  
+  	bzip2 -k abcd
+  	       压缩文件abcd并得到abcd.bz2，并保留原文件
+  	       
+  	bunzip2 abcd.bz2
+	       解压缩之前得到的abcd.bz2文件，如果原文件存在则会提示报错
+  	
+  	tar -cjf xiaojie.tar.bz2 xiaojie	    
+	       和tar命令一起用，得到tar打包的目录和bz2压缩格式的压缩包
+               这也是很常用的安装包格式
+        
+        tar -xjf xiaojie.tar.bz2
+        	互联网下载的软件格式中，也很多这种类型的文件，可以用这个指令解压缩
+
+
+
+      

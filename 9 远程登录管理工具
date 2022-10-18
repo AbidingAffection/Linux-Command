@@ -1,0 +1,60 @@
+
+虚拟机网络配置：
+	虚拟机 -->设置 -->网络
+	
+
+网络连接方式：
+	假设你的电脑里面有两块网卡，装完虚拟机后会出现两块虚拟网卡
+	桥接：利用真实网卡与当前真实的计算机通信，好处是简单，只要设置与真实的Windows同一个IP址，
+	      就可以在虚拟机和真实机以及局域网内其他机器通信。坏处是需要占用网段ip，可能会出现ip冲突
+	NAT：虚拟机通过VMware Network Adapter8这块假网卡与真实机通信，不能与局域网通信，但不占用ip
+	Host-only：虚拟机通过VMware Network Adapter8这块假网卡与真实机通信，不能与局域网通信，但不占用ip
+	其中NAT和Host-only的区别是Host-only是只能和主机通信，但是NAT是可以访问互联网的
+
+
+ifconfig指令：
+	ifconfig是linux中用于显示或配置网络设备（网络接口卡）的命令，英文全称是network interfaces configuring
+	
+	1.ipconfig:
+	lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+		inet 127.0.0.1  netmask 255.0.0.0
+		inet6 ::1  prefixlen 128  scopeid 0x10<host>
+		loop  txqueuelen 1000  (Local Loopback)
+		RX packets 3770  bytes 397514 (397.5 KB)
+		RX errors 0  dropped 0  overruns 0  frame 0
+		TX packets 3770  bytes 397514 (397.5 KB)
+		TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+	lo是loopback的简写，它代表本机回访网卡，ip地址是127.0.0.1，这个是所有操作系统都有的，用来做本机通信测试
+	
+	2.ifconfig eth0 192.168.118.2：(未接入外网)
+	eth0 表示Linux中一切皆为文件，描述网卡的文件名就是 Eth0 Eth1 ...
+	192.168.118.2 必须和VVMware Network Adapter1中的网段保持一致，因为它是192.168.118.1，所以这里为2
+	在我的电脑上并不叫作eth0是因为我是Ubuntu20的新系统，enp2s0f1的名字可以方便对多网卡的区分
+	在Windows中尝试用cmd进行 ping 192.168.118.2 如果得到请求应答包，那么就证明网络设置成功
+	inet inet6 表示ipv4和ipv6的地址
+	
+	3.ifconfig eth0 192.168.1.156：(接入外网)
+	接入外网后，为了访问外网，我们在VMware中把网络的连接方式改成桥接，然后查看真实网卡的地址未192.168.1.155
+	所以我们把eht0的网络地址修改为 192.168.1.156，同样利用cmd 也可以实现真实机与虚拟机之间的通信
+	
+	另外，ifconfig修改完网络ip再重启时是会失效的，想永久改变的话需要区修改配置文件
+	使用命令行是多数是在内存中生效，所以更简单，但重启会失效
+	
+	
+远程连接工具SecureCRT：
+	1.点击connect
+	2.点击quick connect
+	3.输入Linux ip地址
+	4.输入用户名 点击连接并保存 输入密码
+	5.连接成功之后就可以远程控制Linux系统
+	
+	
+df命令：
+	Linux df（英文全拼：disk free） 命令用于显示目前在 Linux 系统上的文件系统磁盘使用情况统计
+	df命令可以用来查看分区，但是如果你是中文安装，这里可能会出现乱码
+	这时我们可以通过 点击SecureCRT的 Options--> Session Options--> 
+	Terminal--> Appearance--> font--> 选择任意中文字体，然后把编码集调成UTF-8
+	
+	
+	
+

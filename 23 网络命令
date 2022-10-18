@@ -1,0 +1,227 @@
+
+网络命令 write：
+	功能描述：给用户发送信息，以ctrl+d保存结束
+	所在路径： /usr/bin/write	 
+	语法说明：write<用户名> 
+	 
+	write tester
+		历史上最古老的及时通讯，可以说QQ的前生，前提条件是所有的用户都登录在这台服务器上
+		输入write tester之后，会出现一个光标引导输入，这个时候输入文字 然后ctrl+d保存结束
+		当tester用户登录之后，就可以看到abidingai发送的信息，信息以EOF文件结束符结尾
+		(可以使用who命令查看当前有哪些在线用户)
+	
+
+网络命令 wall：
+	功能描述：给所有在线用户广播
+	英文原意：write all
+	所在路径： /usr/bin/wall 
+	语法说明：wall [message] 
+	 
+	wall Shenchao is an honest man.
+		所有的在线用户都能收到这个信息，自己也能收到这个信息。
+		
+
+网络命令 ping：
+	功能描述：测试网络连通性
+	所在路径： /bin/ping 
+	语法说明：ping 选项 IP地址
+	          -c 指定发送次数 
+	          -4 6 表示强制使用ipv4和ipv6
+	 
+	ping www.baidu.com
+		ping百度的网址，time越短说明网速越好，如果不加-c 会一直Ping下去
+		PING www.a.shifen.com (36.152.44.96) 56(84) bytes of data.
+		64 bytes from 36.152.44.96: icmp_seq=1 ttl=55 time=13.8 ms
+		64 bytes from 36.152.44.96: icmp_seq=2 ttl=55 time=16.4 ms
+		64 bytes from 36.152.44.96: icmp_seq=3 ttl=55 time=14.4 ms
+		64 bytes from 36.152.44.96: icmp_seq=4 ttl=55 time=14.4 ms
+		......
+
+	ping -c 3 ww.baidu.com
+		重点的话看的是丢包率。ttl是生存时间，也就是每被转发一次，则ttl+1。time是相应时间，国内正常36ms，跨国可能会上200~300ms。
+		PING ps_other.a.shifen.com (39.156.66.10) 56(84) bytes of data.
+		64 bytes from 39.156.66.10: icmp_seq=1 ttl=52 time=36.5 ms
+		64 bytes from 39.156.66.10: icmp_seq=2 ttl=52 time=37.9 ms
+		64 bytes from 39.156.66.10: icmp_seq=3 ttl=52 time=37.1 ms
+
+		--- ps_other.a.shifen.com ping statistics ---
+		3 packets transmitted, 3 received, 0% packet loss, time 11044ms
+		rtt min/avg/max/mdev = 36.493/37.136/37.851/0.556 ms
+
+		
+网络命令 ifconfig：
+	功能描述：查看和设置网卡信息
+	英文原意：interface configure
+	所在路径： /sbin/ifconfig
+	语法说明：ifconfig 网卡名称 IP地址 
+	
+	ifconfig
+		(ubuntu中演示)up表示接口已启用，BROADCAS表示支持广播，RUNNING表示正在工作中，MULTICAST支持多播，mtu 1500最大传输单元
+		inet表示ipv4地址，netmask表示子网掩码，broadcast表示广播地址。
+		inet6表示ipv6地址，prefixlen前缀长度，就是子网掩码为1的个数，scopeid主要看后面是global(可接受对外的)还是host(本机通信使用)
+		ether表示网卡的MAC地址，txqueuelen表示发包的队列，在复杂的网络环境下可能才用到
+		RX 表示收包的数量和大小 / TX 表示发包的数量和大小
+		wlp3s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+		    inet 192.168.1.192  netmask 255.255.255.0  broadcast 192.168.1.255
+		    inet6 2409:8a30:b631:36b0:5b2f:79f4:6b0f:49e8  prefixlen 64  scopeid 0x0<global>
+		    inet6 2409:8a30:b631:36b0:58d8:f2ea:f435:adab  prefixlen 64  scopeid 0x0<global>
+		    inet6 fe80::bd3:de8f:b25d:e7e8  prefixlen 64  scopeid 0x20<link>
+		    ether a0:af:bd:dc:7b:93  txqueuelen 1000  (Ethernet)
+		    RX packets 151048  bytes 155684134 (155.6 MB)
+		    RX errors 0  dropped 0  overruns 0  frame 0
+		    TX packets 65938  bytes 11216572 (11.2 MB)
+		    TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+	 
+	ifconfig eth0 192.168.8.250
+		(centos中演示)临时设置计算机的IP地址，eht0表示真实网卡，lo表示回环网卡
+		ifconfig主要是用来查看自己的网卡信息，而不是用来修改
+		在centos系统中HWaddr后面跟的是MAC地址，在Ubuntu系统中ether后面的是MAC地址
+		inet 都是表示 当前计算机的IP地址
+
+	
+
+网络命令 mail：
+	功能描述：查看和发送电子邮件
+	所在路径： /bin/mail
+	语法说明：mail [用户名] 
+	 
+	mail root
+		同样是crtl+d保存并退出，和write相比的好处是，不管对方在不在线，
+		发送之后只要对方上线，就能看得到
+	
+	mail
+		直接输入mail命令之后，可以查看当前计算机中有的邮件，其中N 表示未读
+	
+	
+网络命令 last：
+	功能描述：列出目前与过去登入系统的用户信息
+	所在路径： /usr/bin/last
+	
+	last
+		非常有效也是非常有用的日志查询命令，可以记录系统的开关机和各个用户的登录时间。
+		abidinga :0           :0               Wed Feb  3 04:55   still logged in
+		reboot   system boot  5.8.0-41-generic Wed Feb  3 04:54   still running
+		abidinga :0           :0               Mon Feb  1 21:33 - down   (00:50)
+		reboot   system boot  5.8.0-41-generic Mon Feb  1 21:33 - 22:23  (00:50)
+		abidinga :0           :0               Mon Feb  1 19:13 - down   (02:18)
+		reboot   system boot  5.8.0-41-generic Mon Feb  1 19:13 - 21:32  (02:19)
+		abidinga :0           :0               Sat Jan 30 19:39 - down   (14:57)
+		reboot   system boot  5.8.0-41-generic Sat Jan 30 19:38 - 10:36  (14:57)
+		abidinga :0           :0               Fri Jan 29 17:05 - down   (01:32)
+	
+	lastlog
+		lastlog命令拥有相同的效果，但是它会把所有的用户先全部列出来，然后记录最后登录时间。
+		gdm                                        **Never logged in**
+		abidingai        pts/1    192.168.1.75     二 1月 26 21:16:37 +0800 2021
+		systemd-coredump                           **Never logged in**
+		sshd                                       **Never logged in**
+		tester                                     **Never logged in**
+		root                                       **Never logged in**
+		nobody                                     **Never logged in**
+
+	
+网络命令 traceroute：
+	功能描述：显示数据包到主机之间的路径
+	所在路径： /bin/traceroute
+	 
+	traceroute www.sina.com.cn
+		 它在实际工作中非常有效果，如果某天发现连不上某个网站，那么可以通过这个traceroute
+		 返回的结果知道 是哪个节点之后出现了问题。
+		 traceroute to www.sina.com.cn (112.28.202.117), 30 hops max, 60 byte packets
+		 1  _gateway (192.168.1.1)  3.398 ms  3.350 ms  6.621 ms
+		 2  100.110.0.1 (100.110.0.1)  12.953 ms  14.098 ms  15.561 ms
+		 3  111.39.3.89 (111.39.3.89)  15.794 ms  15.898 ms  21.006 ms
+		 4  120.210.247.21 (120.210.247.21)  24.161 ms  24.184 ms  25.942 ms
+		 5  112.29.191.238 (112.29.191.238)  25.306 ms  25.404 ms  29.887 ms
+
+		
+网络命令 netstat：
+	功能描述：显示网络相关信息
+	所在路径： /bin/netstat
+	语法说明：netstat [选项]
+		  -t  TCP协议
+		  -u  UDP协议
+		  -l  监听
+		  -r  路由
+		  -n  显示IP地址和端口号
+		  -p  显示进程
+		 
+	netstat -ltun
+		netstat命令在服务器上的使用非常广泛，查看本机监听的端口
+		Active Internet connections (only servers)
+		Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+		tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN     
+		tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     
+		tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN     
+		tcp6       0      0 :::22                   :::*                    LISTEN     
+		tcp6       0      0 ::1:631                 :::*                    LISTEN     
+		udp        0      0 127.0.0.53:53           0.0.0.0:*                          
+		udp        0      0 0.0.0.0:631             0.0.0.0:*                          
+		udp        0      0 0.0.0.0:33478           0.0.0.0:*                          
+		udp        0      0 0.0.0.0:5353            0.0.0.0:*                          
+		udp6       0      0 fe80::7c45:dd99:db7:546 :::*                               
+		udp6       0      0 :::41759                :::*                               
+		udp6       0      0 :::5353                 :::*    
+		Recv-Q 和 Send-Q 表示接受和输出的队列，如果是0的话，则表示网络很通常
+		在Local Address中最后一个冒号显示的是端口号，例如这里没有 80,说明没有网络服务
+		只有TCP协议才能持续监听，因为UDP是无状态的，所以没有监听
+
+	netstat -an
+		查看本机所有的网络连接(这样就不用-tu)，在这里能看见好几个TIME_WAIT状态的tcp链接，通常是因为我刚关闭浏览器...，稍微等待一段时间后，TIME_WAIT状态的tcp链接就会消失。
+		Active Internet connections (servers and established)
+		Proto Recv-Q Send-Q Local Address           Foreign Address         State      
+		tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN     
+		tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN     
+		tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN     
+		tcp        0      0 192.168.1.192:38636     112.29.219.33:443       TIME_WAIT  
+		tcp        0      0 192.168.1.192:49490     112.29.219.49:443       TIME_WAIT 
+		...
+		unix  2      [ ]  DGRAM                    44112    
+		unix  3      [ ]  STREAM     CONNECTED     40471    /run/systemd/journal/stdout
+		unix  3      [ ]  STREAM     CONNECTED     50384    @/tmp/dbus-r2pykoh0xg
+		unix  3      [ ]  STREAM     CONNECTED     47224    /run/systemd/journal/stdout
+		unix  3      [ ]  STREAM     CONNECTED     33976    
+		unix  3      [ ]  STREAM     CONNECTED     51870    /run/dbus/system_bus_socket
+		unix  3      [ ]  STREAM     CONNECTED     43451    
+		上面的部分是计算机中的应用程序使用的网络连接情况，下面是系统本身占用的网络连接情况
+		这个命令的好处是，还能看到正在连接的 连接情况，由此可以知道一些服务的ip地址
+	
+	root@abidingai-W65KJ1-KK1:/home/abidingai# netstat -anp | grep 3306
+		查看端口号3306是否被占用，LISTEN就表示已经被占用了
+		使用-p查看占用的进程是哪个进程的时候，必须先切换到root用户，如果是普通用户的话，-p这一栏是看不见mysqld的，会被隐藏。
+		tcp        0      0 127.0.0.1:33060         0.0.0.0:*               LISTEN      1044/mysqld         
+		tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      1044/mysqld         
+	
+	netstat -rn
+		查看本机路由表，主要用来查看计算机的网关
+		Kernel IP routing table
+		Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+		0.0.0.0         192.168.1.1     0.0.0.0         UG        0 0          0 wlp3s0
+		169.254.0.0     0.0.0.0         255.255.0.0     U         0 0          0 wlp3s0
+		192.168.1.0     0.0.0.0         255.255.255.0   U         0 0          0 wlp3s0
+
+
+网络命令 setup：
+	功能描述：配置网络
+	所在路径： setup是Redhat系列的操作系统所独有的，所以Ubuntu中没有
+		 
+	setup
+		输入setup之后会进入设置界面，可以用来作 防火墙配置 网络配置 系统服务 验证配置
+		如果需要配置ip 只需要选择网络配置-->设备配置 如果选择使用DHCP 相当于Windows中自动获取ip地址
+		这个需要确定你计算机所在的网络是否有 DHCP Server 能给为你自动分配一个ip地址
+		配置完成后需要输入指令 service network restart 重启网络服务，永久生效
+		
+		
+补充命令 mount：
+	命令位置：/bin/mount
+	语法说明：mount [-t文件系统] 设备文件名 挂载点
+	
+	mkdir /mnt/cdrom
+	mount -t iso9660 /dev/sr0 /mnt/cdrom
+		先写设备文件名，或者cdrom，因为/dev/cdrom->sr0是一个软链接文件，链接到sr0
+		然后就可以cd /mnt/cdrom 然后就能查看挂载的文件
+	
+	
+
+	

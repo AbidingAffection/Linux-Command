@@ -1,0 +1,92 @@
+
+文件处理命令ln：
+	功能描述：生成链接文件
+	英文原意：link
+	所在路径： /bin/ln
+	语法说明：ln -s [原文件] [目标文件]
+		     -s 创建软链接
+	
+	范例:
+		$ ln -s /etc/issue /tmp/issue.soft
+		创建文件/etc/issue的软链接/tmp/issue.soft
+		
+		$ ln /etc/issue /tmp/issue.hard
+		创建文件/etc/issue的硬链接/tmp/isssue.hard
+		
+		原文件
+		abidingai@abidingai-W65KJ1-KK1:~$ ls -l /etc/issue
+			-rw-r--r-- 2 root root 26 1月  27 17:40 /etc/issue
+
+		软链接文件
+		abidingai@abidingai-W65KJ1-KK1:~$ ls -l /tmp/issue.soft 
+			lrwxrwxrwx 1 abidingai abidingai 10 5月  29 17:48 /tmp/issue.soft -> /etc/issue
+		
+		abidingai@abidingai-W65KJ1-KK1:/$ ls -l /
+			total 2097236
+			lrwxrwxrwx   1 root root          7 1月  25  2021 bin -> usr/bin
+			drwxr-xr-x   4 root root       4096 4月   3 13:00 boot
+			drwxrwxr-x   2 root root       4096 1月  25  2021 cdrom
+			drwxr-xr-x  22 root root       4900 4月  12 23:38 dev
+			drwxr-xr-x 144 root root      12288 4月  12 16:19 etc
+			drwxr-xr-x   3 root root       4096 1月  25  2021 home
+			lrwxrwxrwx   1 root root          7 1月  25  2021 lib -> usr/lib
+			lrwxrwxrwx   1 root root          9 1月  25  2021 lib32 -> usr/lib32
+			lrwxrwxrwx   1 root root          8 1月  25  2021 sbin -> usr/sbin
+
+		硬链接文件
+		abidingai@abidingai-W65KJ1-KK1:~$ ls -l /tmp/issue.hard 
+		-rw-r--r-- 2 root root 26 1月  27 17:40 /tmp/issue.hard
+
+	说明:
+		软链接文件类似与Windows的快捷方式。
+		软链接文件虽然给三个用户分类都赋予了rwx的权限，但是软链接文件的权限并不决定原文件的权限
+		
+		硬链接文件类似与cp -p，将原文件拷贝了过来，而且大小和修改时间一样的
+		硬链接文件与cp -p的不同是，它和原文件是同步修改的，且没有指向信息
+		
+		
+		
+	实验1:(验证硬链接和原文件具有同步修改的能力)
+		abidingai@abidingai-W65KJ1-KK1:~$ cat /etc/issue
+			Ubuntu 20.04.2 LTS \n \l
+
+		abidingai@abidingai-W65KJ1-KK1:~$ cat /tmp/issue.hard 
+			Ubuntu 20.04.2 LTS \n \l
+		
+		abidingai@abidingai-W65KJ1-KK1:~$ su root
+
+		root@abidingai-W65KJ1-KK1:/home/abidingai# echo "abiding desktop" >> /etc/issue
+		
+		root@abidingai-W65KJ1-KK1:/home/abidingai# cat /etc/issue
+			Ubuntu 20.04.2 LTS \n \l
+			abiding desktop
+		
+		root@abidingai-W65KJ1-KK1:/home/abidingai# cat /tmp/issue.hard
+			Ubuntu 20.04.2 LTS \n \l
+			abiding desktop
+
+		abidingai@abidingai-W65KJ1-KK1:~$ cat /tmp/issue.soft 
+			Ubuntu 20.04.2 LTS \n \l
+			abiding desktop
+	
+		如果你把原文件给删掉了，软链接会报错，但是硬链接文件可以继续正常访问。
+	
+	实验2:(怎么判断一个文件是硬链接文件)
+		abidingai@abidingai-W65KJ1-KK1:~$ ls -i /etc/issue
+			1839200 /etc/issue
+		
+		abidingai@abidingai-W65KJ1-KK1:~$ ls -i /tmp/issue.soft 
+			4984761 /tmp/issue.soft
+		
+		abidingai@abidingai-W65KJ1-KK1:~$ ls -i /tmp/issue.hard 
+			1839200 /tmp/issue.hard
+		
+		一个文件只有一个i结点，但是一个i结点并不只对应一个文件，同时它们是同步更新的
+		当你删除一个i结点对应的文件，其他文件还可以存在。
+	
+	软链接和硬链接的区别：
+		1、软链接可以跨分区，但是硬链接不行
+		2、软连接可以针对目录使用，但是硬链接不行
+	
+	
+	
